@@ -1,0 +1,19 @@
+{
+  "name": "managemate",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Conor6/ManageMate.git"
+  },
+  "author": "Conor Flood",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Conor6/ManageMate/issues"
+  },
+  "homepage": "https://github.com/Conor6/ManageMate#readme"
+}
