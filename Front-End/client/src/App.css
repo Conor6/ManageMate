@@ -36,3 +36,81 @@
     transform: rotate(360deg);
   }
 }
+
+
+#loginDiv{
+  border: 2px solid rgb(5, 179, 223);
+  border-radius: 25px;
+
+}
+
+.container{
+  padding: 10%;
+
+}
+
+.form-control {
+  width: 50% !important;
+  margin-bottom: 30px;
+}
+
+.loginTitle{
+  padding: 20px;
+}
+
+#usrPassword{
+  margin-top: 50px;
+
+}
+
+#loginBtn{
+  margin-top: 50px;
+  margin-bottom: 20px;
+}
+
+.gymLabels{
+  font-weight: bold;
+}
+
+#gymTitle{
+  text-align: center;
+  font-weight: bolder;
+}
+
+#gymSaveBtn{
+  margin-left: 80%;
+
+}
+
+#addGymDiv{
+  border: 2px solid rgb(5, 179, 223);
+  border-radius: 25px;
+  padding: 10px;
+
+}
+
+#addCourtDiv{
+  border: 2px solid rgb(5, 179, 223);
+  border-radius: 25px;
+  padding: 10px;
+
+}
+
+#courtSaveBtn{
+  margin-left: 80%;
+
+}
+
+#courtTitle{
+  text-align: center;
+  font-weight: bolder;
+}
+
+.courtLabels{
+  font-weight: bold;
+}
+
+#gymProfileDiv{
+  border: 2px solid #61dafb;
+
+}

@@ -32,8 +32,8 @@ app.post('/addcourt', async(req, res) => {
 
 
 
-app.listen(5001, function() {
+app.listen(3000, function() {
 
-  console.log("Server running on port 5001");
+  console.log("Server running on port 3000");
 
 });
