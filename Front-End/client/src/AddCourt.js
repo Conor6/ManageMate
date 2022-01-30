@@ -2,9 +2,50 @@ import './App.css';
 import { Form } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import 'bootstrap/dist/css/bootstrap.min.css'
+import { useRef, useState, Fragment } from "react";
 
 function AddCourt() {
     
+  const cNameRef = useRef(null);
+  const cDescRef = useRef(null);
+    
+  //const [crt_name, setCrtName] = useState("");
+
+  const saveCourt =  async e => {
+
+    const data = {
+      
+      crt_name: cNameRef.current.value,
+      crt_desc: cDescRef.current.value
+
+    }
+    
+    try{
+
+      const body = data;
+    
+      //console.log("Court Name ");
+      //console.log(body);
+    
+      const response = await fetch("http://localhost:3001/addcourt", {
+
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(body)
+
+      });
+    
+      console.log(response);
+    
+    }
+    catch(err){
+    
+      console.log(err.message)
+    
+    
+    }
+      
+  }
     
     return (
   
@@ -15,21 +56,21 @@ function AddCourt() {
             <Form>
                 <Form.Group className="mb-3" controlId="courtName">
 
-                <Form.Label className="courtLabels">Court Name:</Form.Label>
+                    <Form.Label className="courtLabels">Court Name:</Form.Label>
 
-                <Form.Control className="" type="text" />
+                    <Form.Control ref ={cNameRef} className="" type="text" />
 
                 </Form.Group>
 
                 <Form.Group className="mb-3" id="courtDesc" controlId="crtDescription">
 
-                <Form.Label className="courtLabels">Court Description:</Form.Label>
+                    <Form.Label className="courtLabels">Court Description:</Form.Label>
 
-                <Form.Control className="" type="text" />
+                    <Form.Control ref = {cDescRef} className="" type="text" />
 
                 </Form.Group>
 
-                <Button className="col-2" id="courtSaveBtn" variant="primary">Save</Button>
+                <Button className="col-2" id="courtSaveBtn" variant="primary" onClick={()=> saveCourt()} >Save</Button>
 
             </Form>
 

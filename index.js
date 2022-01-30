@@ -11,16 +11,15 @@ app.post('/addcourt', async(req, res) => {
   try {
 
     const { crt_name } = req.body;
+    const { crt_desc } = req.body;
 
     const insert = await pool.query(
-      "INSERT INTO court (crt_name) VALUES($1)", 
-      [crt_name]
+      "INSERT INTO court (crt_name, crt_desc) VALUES($1, $2)", 
+      [crt_name, crt_desc]
     );
 
     res.json(insert);
 
-    console.log(req.body);
-    
   } 
   catch (error) {
     console.log(error.message);
@@ -29,11 +28,29 @@ app.post('/addcourt', async(req, res) => {
 })
 
 
+app.post('/addgym', async(req, res) => {
+  try {
+
+    const { crt_name } = req.body;
+    const { crt_desc } = req.body;
+
+    const insert = await pool.query(
+      "INSERT INTO court (crt_name, crt_desc) VALUES($1, $2)", 
+      [crt_name, crt_desc]
+    );
+
+    res.json(insert);
+
+  } 
+  catch (error) {
+    console.log(error.message);
+  }
+
+})
 
 
+app.listen(3001, function() {
 
-app.listen(3000, function() {
-
-  console.log("Server running on port 3000");
+  console.log("Server running on port 3001");
 
 });
