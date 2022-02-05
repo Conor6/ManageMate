@@ -116,6 +116,35 @@ app.post('/addgym', async(req, res) => {
 
 })
 
+app.post('/signup', async(req, res) => {
+  try {
+
+    const { usr_email } = req.body;
+    const { usr_password } = req.body;
+
+
+    bcrypt.genSalt(saltRounds,  function(err, salt) {
+      bcrypt.hash(usr_password, salt, async function(err, hash) {
+
+        const insert = await pool.query(
+          "INSERT INTO user_table (usr_email, usr_password) VALUES($1, $2)", 
+          [usr_email, hash]
+        );
+        
+          res.json(insert);
+
+      });
+  });
+
+    
+
+  } 
+  catch (error) {
+    console.log(error.message);
+  }
+
+})
+
 
 app.listen(3001, function() {
 

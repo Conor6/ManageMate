@@ -4,6 +4,7 @@ import './AddCourt';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Login from './Login';
 import AddCourt from './AddCourt';
+import SignUp from './SignUp';
 
 function App() {
   return (
@@ -11,7 +12,7 @@ function App() {
     <div className='gym-name-container'>
 
 
-      <Login></Login>
+      <SignUp></SignUp>
 
 
 
