@@ -12,7 +12,7 @@ function App() {
     <div className='gym-name-container'>
 
 
-      <SignUp></SignUp>
+      <Login></Login>
 
 
 

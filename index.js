@@ -41,33 +41,18 @@ app.post('/login', async(req, res) => {
     
     const user = await pool.query("SELECT usr_password FROM user_table WHERE usr_email = $1", [email]);
 
-    //console.log(user);
-
-    console.log("Test 2");
 
     console.log(user.rows.length);
 
     if(user.rows.length === 0){
 
-      console.log("Test 3");
-
       return res.status(401).json("Email or Password incorrect")
 
     }
 
-
     let db_password = user.rows[0].usr_password;
 
-    console.log("Password from Database: ");
-    console.log(db_password);
-
-    /*if(password == db_password){
-      console.log("Correct Password");
-    }
-    */
-
-    console.log("Test 4");
-
+  
     const validPassword = await bcrypt.compare(password, db_password);
 
     console.log("Valid Password: ");
@@ -75,13 +60,10 @@ app.post('/login', async(req, res) => {
 
     if(!validPassword){
 
-      console.log("Test 5");
-
       return res.status(401).json("Email or Password incorrect!");
 
     }
     
-
     res.json(user);
 
   } 
@@ -94,7 +76,6 @@ app.post('/login', async(req, res) => {
   }
 
 })
-
 
 app.post('/addgym', async(req, res) => {
   try {
