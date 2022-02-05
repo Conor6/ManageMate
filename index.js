@@ -80,12 +80,14 @@ app.post('/login', async(req, res) => {
 app.post('/addgym', async(req, res) => {
   try {
 
-    const { crt_name } = req.body;
-    const { crt_desc } = req.body;
+    const { gym_name } = req.body;
+    const { gym_address } = req.body;
+    const { gym_opening_hours } = req.body;
+
 
     const insert = await pool.query(
-      "INSERT INTO court (crt_name, crt_desc) VALUES($1, $2)", 
-      [crt_name, crt_desc]
+      "INSERT INTO gym (gym_name, gym_address, gym_opening_hours) VALUES($1, $2, $3)", 
+      [gym_name, gym_address, gym_opening_hours]
     );
 
     res.json(insert);
