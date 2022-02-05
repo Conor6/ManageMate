@@ -1,9 +1,9 @@
 import logo from './logo.svg';
 import './App.css';
 import './AddCourt';
-import AddCourt from './AddCourt';
 import 'bootstrap/dist/css/bootstrap.min.css'
-
+import Login from './Login';
+import AddCourt from './AddCourt';
 
 function App() {
   return (
@@ -11,7 +11,7 @@ function App() {
     <div className='gym-name-container'>
 
 
-      <AddCourt></AddCourt>
+      <Login></Login>
 
 
 

@@ -2,9 +2,12 @@ const express = require('express');
 const app = express();
 const cors = require("cors");
 const pool = require("./db");
+const bcrypt = require("bcrypt");
 
 app.use(cors());
 app.use(express.json());
+
+const saltRounds = 10;
 
 
 app.post('/addcourt', async(req, res) => {
@@ -23,6 +26,71 @@ app.post('/addcourt', async(req, res) => {
   } 
   catch (error) {
     console.log(error.message);
+  }
+
+})
+
+app.post('/login', async(req, res) => {
+  try {
+
+    const email = req.body.usr_email;
+    const  password = req.body.usr_password;
+
+    console.log(email);
+    console.log(password);
+    
+    const user = await pool.query("SELECT usr_password FROM user_table WHERE usr_email = $1", [email]);
+
+    //console.log(user);
+
+    console.log("Test 2");
+
+    console.log(user.rows.length);
+
+    if(user.rows.length === 0){
+
+      console.log("Test 3");
+
+      return res.status(401).json("Email or Password incorrect")
+
+    }
+
+
+    let db_password = user.rows[0].usr_password;
+
+    console.log("Password from Database: ");
+    console.log(db_password);
+
+    /*if(password == db_password){
+      console.log("Correct Password");
+    }
+    */
+
+    console.log("Test 4");
+
+    const validPassword = await bcrypt.compare(password, db_password);
+
+    console.log("Valid Password: ");
+    console.log(validPassword);
+
+    if(!validPassword){
+
+      console.log("Test 5");
+
+      return res.status(401).json("Email or Password incorrect!");
+
+    }
+    
+
+    res.json(user);
+
+  } 
+  catch (error) {
+
+    console.log(error.message);
+
+    res.status(500).send("Server Error");
+
   }
 
 })
