@@ -1,8 +1,11 @@
 import { Form } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import { useRef} from "react";
+import { useNavigate } from "react-router-dom";
 
 function AddGym() {
+
+  let navigate = useNavigate();
 
     const gym_name = useRef(null);
     const gym_address = useRef(null);
@@ -32,6 +35,10 @@ function AddGym() {
             });
         
             console.log(response);
+
+            if(response.status == 200){
+              navigate("/addcourt");
+            }
         
         }
         catch(err){

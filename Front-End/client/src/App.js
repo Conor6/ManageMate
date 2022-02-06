@@ -1,25 +1,26 @@
-import logo from './logo.svg';
 import './App.css';
-import './AddCourt';
-import 'bootstrap/dist/css/bootstrap.min.css'
-import Login from './Login';
-import AddCourt from './AddCourt';
-import SignUp from './SignUp';
-import AddGym from './AddGym';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Login from "./Pages/Login";
+import SignUp from "./Pages/SignUp";
+import AddCourt from './Pages/AddCourt';
+import AddGym from './Pages/AddGym';
+
 
 function App() {
   return (
 
-    <div className='gym-name-container'>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login />}/>
+        <Route path="/signup" element={<SignUp />}/>
+        <Route path="/addcourt" element={<AddCourt />}/>
+        <Route path="/addgym" element={<AddGym />}/>
+      </Routes>
+    </Router>
 
+  )
 
-      <AddGym></AddGym>
-
-
-
-    </div>
-
-  );
+  
 }
 
 export default App;

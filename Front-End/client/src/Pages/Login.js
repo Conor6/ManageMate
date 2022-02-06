@@ -1,8 +1,11 @@
 import { Form } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import { useRef} from "react";
+import {useNavigate } from "react-router-dom";
 
 function Login() {
+
+  let navigate = useNavigate();
 
     const usr_email = useRef(null);
     const usr_password = useRef(null);
@@ -29,7 +32,17 @@ function Login() {
 
             });
         
-            console.log(response);
+            console.log(response.status);
+
+            if(response.status == 200){
+
+              navigate("/addgym");
+
+              console.log("Navigating...");
+
+
+
+            }
         
         }
         catch(err){

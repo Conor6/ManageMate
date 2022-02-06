@@ -1,15 +1,13 @@
-import './App.css';
 import { Form } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { useRef, useState, Fragment } from "react";
+import { useRef} from "react";
 
 function AddCourt() {
     
   const cNameRef = useRef(null);
   const cDescRef = useRef(null);
     
-  //const [crt_name, setCrtName] = useState("");
 
   const saveCourt =  async e => {
 

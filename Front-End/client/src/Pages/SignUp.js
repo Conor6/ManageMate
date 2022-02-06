@@ -1,8 +1,11 @@
 import { Form } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import { useRef} from "react";
+import {useNavigate } from "react-router-dom";
 
 function SignUp() {
+
+  let navigate = useNavigate();
 
     const usr_email = useRef(null);
     const usr_password = useRef(null);
@@ -30,6 +33,10 @@ function SignUp() {
             });
         
             console.log(response);
+
+            if(response.status == 200){
+              navigate("/");
+            }
         
         }
         catch(err){
