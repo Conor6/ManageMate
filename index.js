@@ -4,6 +4,7 @@ const cors = require("cors");
 const pool = require("./db");
 const bcrypt = require("bcrypt");
 
+
 app.use(cors());
 app.use(express.json());
 
@@ -114,7 +115,11 @@ app.post('/signup', async(req, res) => {
           [usr_email, hash]
         );
         
-          res.json(insert);
+        res.json(insert);
+
+        console.log(res.rows);
+
+
 
       });
   });
@@ -127,6 +132,27 @@ app.post('/signup', async(req, res) => {
   }
 
 })
+
+app.get('/gymlist', async(req, res) => {
+  try {
+
+
+    const select = await pool.query(
+      "SELECT * FROM gym;", 
+    );
+    
+    res.json(select);
+
+    console.log(res.body);
+
+      
+  } 
+  catch (error) {
+    console.log(error.message);
+  }
+
+})
+
 
 
 app.listen(3001, function() {
