@@ -143,8 +143,6 @@ app.get('/gymlist', async(req, res) => {
     
     res.json(select);
 
-    console.log(res.body);
-
       
   } 
   catch (error) {
