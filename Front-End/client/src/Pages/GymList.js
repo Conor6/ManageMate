@@ -34,7 +34,7 @@ function GymList() {
 
       <table className="table table-bordered">
           <thead>
-            <tr>
+            <tr key="0">
               <th>Gym Name</th>
               <th>Edit Gym</th>
               <th>Delete Gym</th>
@@ -42,7 +42,7 @@ function GymList() {
           </thead>
           <tbody>
             {gym_data.map(gym_data => (
-              <tr>
+              <tr key={gym_data.gym_id}>
                 <td key={gym_data.id}>{gym_data.gym_name}</td>
                 <td>Edit</td>
                 <td>Delete</td>
