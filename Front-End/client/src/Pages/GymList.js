@@ -1,9 +1,9 @@
-import { Form } from "react-bootstrap";
-import Button from "react-bootstrap/Button";
-import { useEffect, useRef, useState} from "react";
-import {useNavigate } from "react-router-dom";
+import { useEffect, useState} from "react";
+import {useNavigate, useParams } from "react-router-dom";
 
 function GymList() {
+
+  let navigate = useNavigate();
 
   const [gym_data, setGymData] = useState([]);
 
@@ -27,14 +27,25 @@ function GymList() {
 
   }, []);
 
+  const alertCall = (gym_id) => {
+
+    navigate(`/gymprofile/${gym_id}`);
+
+    console.log(gym_id);
+
+
+
+    
+  }
+  
 
   return (
     
     <div className=" col-md-6 mx-auto" id="gymProfileDiv">
 
-      <table className="table table-bordered">
+      <table className="table table-bordered" variant="dark">
           <thead>
-            <tr key="0">
+            <tr>
               <th>Gym Name</th>
               <th>Edit Gym</th>
               <th>Delete Gym</th>
@@ -42,8 +53,8 @@ function GymList() {
           </thead>
           <tbody>
             {gym_data.map(gym_data => (
-              <tr key={gym_data.gym_id}>
-                <td key={gym_data.id}>{gym_data.gym_name}</td>
+              <tr key={gym_data.gym_id} data-item={gym_data}>
+                <td data-title="Gym-Name" key={gym_data.id} onClick={(e) => alertCall(gym_data.gym_id)}>{gym_data.gym_name}</td>
                 <td>Edit</td>
                 <td>Delete</td>
               </tr>

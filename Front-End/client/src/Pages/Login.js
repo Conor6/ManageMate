@@ -34,9 +34,9 @@ function Login() {
         
             console.log(response.status);
 
-            if(response.status == 200){
+            if(response.status === 200){
 
-              navigate("/addgym");
+              navigate("/gymlist");
 
               console.log("Navigating...");
 

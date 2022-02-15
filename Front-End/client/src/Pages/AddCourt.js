@@ -2,17 +2,22 @@ import { Form } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { useRef} from "react";
+import {useParams, useNavigate} from "react-router-dom";
 
 function AddCourt() {
     
+  let navigate = useNavigate();
   const cNameRef = useRef(null);
   const cDescRef = useRef(null);
+  let gym_id = useParams();
+  let id = gym_id.gym_id;
     
 
-  const saveCourt =  async e => {
+  const saveCourt =  async id => {
 
     const data = {
       
+      gym_id: id,
       crt_name: cNameRef.current.value,
       crt_desc: cDescRef.current.value
 
@@ -34,6 +39,10 @@ function AddCourt() {
       });
     
       console.log(response);
+
+      let gym_id = id;
+
+      navigate(`/gymprofile/${gym_id}`);
     
     }
     catch(err){
@@ -68,7 +77,7 @@ function AddCourt() {
 
                 </Form.Group>
 
-                <Button className="col-2" id="courtSaveBtn" variant="primary" onClick={()=> saveCourt()} >Save</Button>
+                <Button className="col-2" id="courtSaveBtn" variant="primary" onClick={()=> saveCourt(id)} >Save</Button>
 
             </Form>
 

@@ -14,12 +14,13 @@ const saltRounds = 10;
 app.post('/addcourt', async(req, res) => {
   try {
 
+    const { gym_id } = req.body;
     const { crt_name } = req.body;
     const { crt_desc } = req.body;
 
     const insert = await pool.query(
-      "INSERT INTO court (crt_name, crt_desc) VALUES($1, $2)", 
-      [crt_name, crt_desc]
+      "INSERT INTO court (gym_id, crt_name, crt_desc) VALUES($1, $2, $3)", 
+      [gym_id, crt_name, crt_desc]
     );
 
     res.json(insert);
