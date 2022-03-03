@@ -1,20 +1,23 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
-function jwtGenerator(usr_id) {
+function jwtGenerator(usr_id, usr_email, usr_type) {
+  
   const payload = {
     user: {
-      usr_id: usr_id
+      usr_id: usr_id,
+      usr_email: usr_email,
+      usr_type:usr_type
     }
+
   };
+
+  //console.log("Values inside Generator");
+  //console.log(usr_id);
+  //console.log(usr_email);
+  //console.log(usr_type);
   
-//the code below was the code written from the tutorial
-//Look at file server/routes/dashboard.js to see the change code for this code
   
-//   function jwtGenerator(user_id) {
-//   const payload = {
-//     user: user_id
-//   };
 
   return jwt.sign(payload, process.env.jwtSecret, { expiresIn: "1h" });
 }

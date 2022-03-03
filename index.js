@@ -110,6 +110,7 @@ app.post('/signup', async(req, res) => {
 
     const { usr_email, usr_password, usr_type} = req.body;
 
+    console.log("In index.js")
     console.log(usr_email);
     console.log(usr_password);
     console.log(usr_type);
@@ -118,11 +119,11 @@ app.post('/signup', async(req, res) => {
     const checkUser = await pool.query("SELECT * FROM user_table WHERE usr_email = $1", 
     [usr_email]);
 
-    if(checkUser.rowCount > 0)
-    {
-      console.log("User already exists");
-      
-    }
+    //if(checkUser.length !== 0)
+    //{
+   //   return res.status(401).send("User already exists");
+
+    //}
 
     //res.json(checkUser.rows);
     
@@ -140,11 +141,19 @@ app.post('/signup', async(req, res) => {
 
     console.log("JWT call");
 
-    const token = jwtGenerator(insertUser.rows.usr_id);
+    let db_id = checkUser.rows[0].usr_id;
+    let db_email = checkUser.rows[0].usr_email;
+    let db_user_type = checkUser.rows[0].usr_type;
 
-    console.log(insertUser);
 
-    console.log("After JWT call");
+    const token = jwtGenerator(db_id, db_email, db_user_type);
+
+    //console.log("user rows")
+    //console.log(checkUser.rows[0].usr_email);
+
+    //console.log(insertUser);
+
+    //console.log("After JWT call");
 
     return res.json({ token });
     
