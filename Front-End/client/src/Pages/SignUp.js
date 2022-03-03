@@ -1,7 +1,8 @@
 import { Form } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
-import { useRef} from "react";
+import { useRef } from "react";
 import {useNavigate } from "react-router-dom";
+import Dropdown from "react-bootstrap/Dropdown";
 
 function SignUp() {
 
@@ -9,14 +10,16 @@ function SignUp() {
 
     const usr_email = useRef(null);
     const usr_password = useRef(null);
+    const usr_type = useRef(null);
     
 
-    const signUpUser =  async e => {
+    const signUpUser =  async () => {
 
         const data = {
       
             usr_email: usr_email.current.value,
-            usr_password: usr_password.current.value
+            usr_password: usr_password.current.value,
+            usr_type : usr_type.current.value
     
         }
 
@@ -34,7 +37,7 @@ function SignUp() {
         
             console.log(response);
 
-            if(response.status == 200){
+            if(response.status === 200){
               navigate("/");
             }
         
@@ -64,6 +67,13 @@ function SignUp() {
           <Form.Control className="text-center col-md-6 mx-auto" type="password" placeholder="Password" ref = {usr_password}/>
 
         </Form.Group>
+
+        <Form.Group className="mb-3" id="usrPassword" controlId="Password">
+
+          <Form.Control className="text-center col-md-6 mx-auto" type="text" placeholder="Select User Type" ref = {usr_type}/>
+
+        </Form.Group>
+
 
         <Button id="loginBtn" variant="primary" onClick={()=> signUpUser()}>Sign Up</Button>
 

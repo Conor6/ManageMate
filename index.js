@@ -3,12 +3,12 @@ const app = express();
 const cors = require("cors");
 const pool = require("./db");
 const bcrypt = require("bcrypt");
+const jwtGenerator = require('./jwtGenerator');
 
 
 app.use(cors());
 app.use(express.json());
 
-const saltRounds = 10;
 
 
 app.post('/addcourt', async(req, res) => {
@@ -102,28 +102,52 @@ app.post('/addgym', async(req, res) => {
 })
 
 app.post('/signup', async(req, res) => {
+  
   try {
 
-    const { usr_email } = req.body;
-    const { usr_password } = req.body;
+
+    console.log("/signup");
+
+    const { usr_email, usr_password, usr_type} = req.body;
+
+    console.log(usr_email);
+    console.log(usr_password);
+    console.log(usr_type);
 
 
-    bcrypt.genSalt(saltRounds,  function(err, salt) {
-      bcrypt.hash(usr_password, salt, async function(err, hash) {
+    const checkUser = await pool.query("SELECT * FROM user_table WHERE usr_email = $1", 
+    [usr_email]);
 
-        const insert = await pool.query(
-          "INSERT INTO user_table (usr_email, usr_password) VALUES($1, $2)", 
-          [usr_email, hash]
-        );
-        
-        res.json(insert);
+    if(checkUser.rowCount > 0)
+    {
+      console.log("User already exists");
+      
+    }
 
-        console.log(res.rows);
+    //res.json(checkUser.rows);
+    
 
+    const saltRounds = 10;
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hash = await bcrypt.hash(usr_password, salt);
 
+    const insertUser = await pool.query(
+      "INSERT INTO user_table (usr_email, usr_password, usr_type) VALUES($1, $2, $3)", 
+      [usr_email, hash, usr_type]
+    );
 
-      });
-  });
+    
+
+    console.log("JWT call");
+
+    const token = jwtGenerator(insertUser.rows.usr_id);
+
+    console.log(insertUser);
+
+    console.log("After JWT call");
+
+    return res.json({ token });
+    
 
     
 
