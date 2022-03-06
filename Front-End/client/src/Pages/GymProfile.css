@@ -4,7 +4,7 @@
 }
 
 .heading{
-
+    padding: 10px;
     text-align: center;
 }
 
@@ -18,9 +18,8 @@ h2{
 }
 
 .content-view{
-   display: flex;
-   align-items: center;
-
+    display: flex;
+    align-items: center;
 }
 
 .navbar{
@@ -29,5 +28,22 @@ h2{
 }
 
 .title{
+    width: 100%;
+    text-align: center;
+    font-size: 28px;
+}
+
+.test{
+    width: 100%;
+}
+
+.content-nav-bar{
+    border-top: 2px solid black;
+    border-left: 2px solid black;
+    border-right: 2px solid black;
     
+}
+
+.content-view{
+    border: 2px solid black;
 }

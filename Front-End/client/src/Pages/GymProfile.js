@@ -1,7 +1,7 @@
 import './GymProfile.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { useNavigate, useParams } from "react-router-dom";
-import {Navbar, Container, Nav, Row} from 'react-bootstrap';
+import {Navbar, Container, Nav} from 'react-bootstrap';
 
 
 
@@ -28,45 +28,41 @@ function GymProfile() {
 
     return (
 
-        
         <>
-            <Navbar className='navbar' bg="primary" variant="dark">
-                
-                <Navbar.Brand href="#home">ManageMate</Navbar.Brand>
-                <Nav className="me-auto">
-                <Nav.Link href="#home">Home</Nav.Link>
-                <Nav.Link href="#gym-list">Gym List</Nav.Link>
-                <Nav.Link href="#my-team">My Team</Nav.Link>
-                </Nav>
-
-            </Navbar>
-            
+        
             <div className='heading'>
 
                 <h1 className='gym-name'> {gym_name.gym_name} </h1>
 
             </div>
 
-            <Container>
+            <Container className='Pictures'>
+            </Container>
 
-                <Navbar className='content-view' bg="primary" variant="dark">
+            <Container className='content'>
+
+                <Navbar className='content-nav-bar' bg="primary" variant="dark">
                     
-                    <Container>
+                    <Container className="justify-content-center">
 
-                        <Nav className="content-view me-auto">
+                        <Nav className="test">
 
-                            <Container fluid>
-
-                                <Nav.Link className="title" href="#schedule">Schedule</Nav.Link>
-                                <Nav.Link className="title"  href="#details">Details</Nav.Link>
-                                <Nav.Link className="title"  href="#location">Location</Nav.Link>
-
-                            </Container>
+                            <Nav.Link className="title" href="#schedule">Schedule</Nav.Link>
+                            <Nav.Link className="title"  href="#details">Details</Nav.Link>
+                            <Nav.Link className="title"  href="#location">Location</Nav.Link>
+                            <Nav.Link className="title"  href="#add-court">Courts</Nav.Link>                        
                             
                         </Nav>
 
                     </Container>
                 </Navbar>
+
+                <Container className='content-view'>
+                    
+                
+                </Container>
+
+               
 
             </Container>
                         
