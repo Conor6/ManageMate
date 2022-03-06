@@ -30,7 +30,7 @@ function SignUp() {
             const response = await fetch("http://localhost:3001/signup", {
 
                 method: "POST",
-                headers: {"Content-Type": "application/json"},
+                headers: {"Content-Type": "application/json", jwt_token: localStorage.token},
                 body: JSON.stringify(body)
 
             });

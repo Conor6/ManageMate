@@ -18,7 +18,7 @@ function App() {
         <Route path="/addcourt/:gym_id" element={<AddCourt />}/>
         <Route path="/addgym" element={<AddGym />}/>
         <Route path="/gymlist" element={<GymList />}/>
-        <Route path="/gymprofile/:gym_id" element={<GymProfile />}/>
+        <Route path="/gymprofile/:gym_name" element={<GymProfile />}/>
       </Routes>
     </Router>
 

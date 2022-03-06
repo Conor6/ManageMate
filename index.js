@@ -65,8 +65,12 @@ app.post('/login', async(req, res) => {
       return res.status(401).json("Email or Password incorrect!");
 
     }
+
+    const token = jwtGenerator(user.rows[0].usr_id, user.rows[0].usr_email, user.rows[0].usr_type)
     
-    res.json(user);
+    res.json({token});
+
+    console.log({token})
 
   } 
   catch (error) {
@@ -110,10 +114,10 @@ app.post('/signup', async(req, res) => {
 
     const { usr_email, usr_password, usr_type} = req.body;
 
-    console.log("In index.js")
-    console.log(usr_email);
-    console.log(usr_password);
-    console.log(usr_type);
+    //console.log("In index.js")
+    //console.log(usr_email);
+    //console.log(usr_password);
+    //console.log(usr_type);
 
 
     const checkUser = await pool.query("SELECT * FROM user_table WHERE usr_email = $1", 

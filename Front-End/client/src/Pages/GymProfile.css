@@ -1,0 +1,33 @@
+.container-fluid{
+    width: 100% !important;
+
+}
+
+.heading{
+
+    text-align: center;
+}
+
+.gym-name{
+    font-weight: bolder;
+    font-size: 10vh !important;
+}
+
+h2{
+    text-align: center;
+}
+
+.content-view{
+   display: flex;
+   align-items: center;
+
+}
+
+.navbar{
+    height: 10vh;
+    width: 100%;
+}
+
+.title{
+    
+}
