@@ -32,15 +32,18 @@ app.post('/addcourt', async(req, res) => {
 
 })
 
+//Post request to log a user in
 app.post('/login', async(req, res) => {
   try {
 
+    //Get information from front end
     const email = req.body.usr_email;
     const  password = req.body.usr_password;
 
-    console.log(email);
-    console.log(password);
+    //console.log(email);
+    //console.log(password);
     
+    //Create select query to see if user exists
     const user = await pool.query("SELECT usr_password FROM user_table WHERE usr_email = $1", [email]);
 
 
@@ -52,20 +55,24 @@ app.post('/login', async(req, res) => {
 
     }
 
+    //Get the password that is stored in the database
     let db_password = user.rows[0].usr_password;
 
   
+    //Compare the database password and the password that the user entered
     const validPassword = await bcrypt.compare(password, db_password);
 
-    console.log("Valid Password: ");
-    console.log(validPassword);
+    //console.log("Valid Password: ");
+    //console.log(validPassword);
 
+    //validPassword returns true or false, if it is false, then the two passwords do not match
     if(!validPassword){
 
       return res.status(401).json("Email or Password incorrect!");
 
     }
 
+    //Generate token for the user
     const token = jwtGenerator(user.rows[0].usr_id, user.rows[0].usr_email, user.rows[0].usr_type)
     
     res.json({token});
@@ -143,7 +150,7 @@ app.post('/signup', async(req, res) => {
 
     
 
-    console.log("JWT call");
+    //console.log("JWT call");
 
     let db_id = checkUser.rows[0].usr_id;
     let db_email = checkUser.rows[0].usr_email;
