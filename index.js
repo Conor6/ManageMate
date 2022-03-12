@@ -4,7 +4,8 @@ const cors = require("cors");
 const pool = require("./db");
 const bcrypt = require("bcrypt");
 const jwtGenerator = require('./jwtGenerator');
-
+const validInfo = require('./Middleware/validinfo');
+const authorisation = require('./Middleware/authorisation');
 
 app.use(cors());
 app.use(express.json());
@@ -33,21 +34,15 @@ app.post('/addcourt', async(req, res) => {
 })
 
 //Post request to log a user in
-app.post('/login', async(req, res) => {
+app.post('/login', validInfo, async(req, res) => {
   try {
 
     //Get information from front end
     const email = req.body.usr_email;
     const  password = req.body.usr_password;
-
-    //console.log(email);
-    //console.log(password);
     
     //Create select query to see if user exists
-    const user = await pool.query("SELECT usr_password FROM user_table WHERE usr_email = $1", [email]);
-
-
-    console.log(user.rows.length);
+    const user = await pool.query("SELECT * FROM user_table WHERE usr_email = $1", [email]);
 
     if(user.rows.length === 0){
 
@@ -62,9 +57,6 @@ app.post('/login', async(req, res) => {
     //Compare the database password and the password that the user entered
     const validPassword = await bcrypt.compare(password, db_password);
 
-    //console.log("Valid Password: ");
-    //console.log(validPassword);
-
     //validPassword returns true or false, if it is false, then the two passwords do not match
     if(!validPassword){
 
@@ -77,7 +69,6 @@ app.post('/login', async(req, res) => {
     
     res.json({token});
 
-    console.log({token})
 
   } 
   catch (error) {
@@ -89,6 +80,21 @@ app.post('/login', async(req, res) => {
   }
 
 })
+
+app.get("/verify", authorisation, async (req,res) => {
+
+  try{
+
+    res.json(true);
+
+  }
+  catch(error) {
+
+    console.error(error.message)
+
+  }
+
+});
 
 app.post('/addgym', async(req, res) => {
   try {
@@ -112,32 +118,11 @@ app.post('/addgym', async(req, res) => {
 
 })
 
-app.post('/signup', async(req, res) => {
+app.post('/signup', validInfo, async(req, res) => {
   
   try {
 
-
-    console.log("/signup");
-
     const { usr_email, usr_password, usr_type} = req.body;
-
-    //console.log("In index.js")
-    //console.log(usr_email);
-    //console.log(usr_password);
-    //console.log(usr_type);
-
-
-    const checkUser = await pool.query("SELECT * FROM user_table WHERE usr_email = $1", 
-    [usr_email]);
-
-    //if(checkUser.length !== 0)
-    //{
-   //   return res.status(401).send("User already exists");
-
-    //}
-
-    //res.json(checkUser.rows);
-    
 
     const saltRounds = 10;
     const salt = await bcrypt.genSalt(saltRounds);
@@ -148,28 +133,20 @@ app.post('/signup', async(req, res) => {
       [usr_email, hash, usr_type]
     );
 
-    
+    const checkUser = await pool.query("SELECT * FROM user_table WHERE usr_email = $1", 
+    [usr_email]);
 
-    //console.log("JWT call");
+
 
     let db_id = checkUser.rows[0].usr_id;
     let db_email = checkUser.rows[0].usr_email;
     let db_user_type = checkUser.rows[0].usr_type;
 
-
     const token = jwtGenerator(db_id, db_email, db_user_type);
 
-    //console.log("user rows")
-    //console.log(checkUser.rows[0].usr_email);
-
-    //console.log(insertUser);
-
-    //console.log("After JWT call");
+    console.log(token);
 
     return res.json({ token });
-    
-
-    
 
   } 
   catch (error) {
