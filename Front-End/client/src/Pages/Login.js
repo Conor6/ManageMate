@@ -11,43 +11,39 @@ function Login({setAuth}) {
   const usr_password = useRef(null);
     
 
-  const loginUser =  async () => {
-
-      const data = {
-      
-        usr_email: usr_email.current.value,
-        usr_password: usr_password.current.value
+  const loginUser =  async (e) => {
     
-      }
+    const data = {
+      
+      usr_email: usr_email.current.value,
+      usr_password: usr_password.current.value
+    
+    }
 
-      try{
+    try{
 
-        const body = data;
+      const body = data;
 
-        const response = await fetch("http://localhost:3001/login", {
+      const response = await fetch("http://localhost:3001/login", {
 
-          method: "POST",
-          headers: {"Content-Type": "application/json", },
-          body: JSON.stringify(body)
+        method: "POST",
+        headers: {"Content-Type": "application/json", },
+        body: JSON.stringify(body)
 
-        });
+      });
+
+
+      const parseRes = await response.json();
+
+      localStorage.setItem("token", parseRes.token);
+      setAuth(true);
         
-        console.log(response.status);
-
-        if(response.status === 200){
-
-          navigate("/gymlist");
-
-          console.log("Navigating...");
-
-        }
+    }
+    catch(err){
         
-      }
-      catch(err){
+      console.log(err.message)
         
-          console.log(err.message)
-        
-      }
+    }
     
   }
 
@@ -69,7 +65,7 @@ function Login({setAuth}) {
 
         </Form.Group>
 
-        <Button id="loginBtn" variant="primary" onClick={()=> setAuth(true)}>Login</Button>
+        <Button id="loginBtn" variant="primary" onClick={()=> loginUser()}>Login</Button>
 
       </Form>
     </div>
