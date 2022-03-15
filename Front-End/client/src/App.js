@@ -1,37 +1,65 @@
 import './App.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom';
+import {Navbar, Nav} from 'react-bootstrap';
+import { useEffect, useState} from "react";
+
 import Login from "./Pages/Login";
 import SignUp from "./Pages/SignUp";
 import AddCourt from './Pages/AddCourt';
 import AddGym from './Pages/AddGym';
 import GymList from './Pages/GymList';
 import GymProfile from './Pages/GymProfile';
-import {Navbar, Nav} from 'react-bootstrap';
+import Dashboard from './Pages/Dashboard';
 
 
 function App() {
+
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const setAuth = (boolean) => {
+    setIsAuthenticated(boolean);
+  }
+
   return (
 
+    <>
+      <Navbar className='navbar' bg="primary" variant="dark">
+
+        <Navbar.Brand href="#home">ManageMate</Navbar.Brand>
+
+        <Nav className="me-auto">
+          <Nav.Link href="http://localhost:3000/">Home</Nav.Link>
+          <Nav.Link href="http://localhost:3000/gymlist">Gym List</Nav.Link>
+          <Nav.Link href="#my-team">My Team</Nav.Link>
+        </Nav>
+
+      </Navbar>
     
-      <><Navbar className='navbar' bg="primary" variant="dark">
+      <Router>
+      <Routes>
 
-      <Navbar.Brand href="#home">ManageMate</Navbar.Brand>
-      <Nav className="me-auto">
-        <Nav.Link href="http://localhost:3000/">Home</Nav.Link>
-        <Nav.Link href="http://localhost:3000/gymlist">Gym List</Nav.Link>
-        <Nav.Link href="#my-team">My Team</Nav.Link>
-      </Nav>
+        <Route path="/" element={ !isAuthenticated ? ( <Login setAuth={setAuth}/> ) : (<Navigate to="/dashboard"/>)} />
 
-    </Navbar><Router>
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/addcourt/:gym_id" element={<AddCourt />} />
-          <Route path="/addgym" element={<AddGym />} />
-          <Route path="/gymlist" element={<GymList />} />
-          <Route path="/gymprofile/:gym_name" element={<GymProfile />} />
-        </Routes>
-      </Router></>
+        <Route path="/signup" element={ !isAuthenticated ? ( <SignUp setAuth={setAuth}/> ) : (<Navigate to="/"/>)} />
+
+        <Route path="/addcourt/:gym_id" element={ isAuthenticated ? ( <AddCourt setAuth={setAuth}/> ) : (<Navigate to="/"/>)} />
+
+        <Route path="/addgym" element={ isAuthenticated ? ( <AddGym setAuth={setAuth}/> ) : (<Navigate to="/"/>)} />
+
+        <Route path="/gymlist" element={ isAuthenticated ? ( <GymList setAuth={setAuth}/> ) : (<Navigate to="/"/>)} />
+
+        <Route path="/gymprofile/:gym_name" element={<GymProfile />} />
+
+        <Route path="/dashboard" element={ isAuthenticated ? ( <Dashboard setAuth={setAuth}/> ) : (<Navigate to="/"/>)} />
+
+      </Routes>
+
+      </Router>
+    </>
+
+
+
+
 
   )
 

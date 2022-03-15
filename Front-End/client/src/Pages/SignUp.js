@@ -4,7 +4,7 @@ import { useRef } from "react";
 import {useNavigate } from "react-router-dom";
 import Dropdown from "react-bootstrap/Dropdown";
 
-function SignUp() {
+function SignUp({setAuth}) {
 
   let navigate = useNavigate();
 
@@ -15,41 +15,49 @@ function SignUp() {
 
     const signUpUser =  async () => {
 
-        const data = {
+      const data = {
       
-            usr_email: usr_email.current.value,
-            usr_password: usr_password.current.value,
-            usr_type : usr_type.current.value
+        usr_email: usr_email.current.value,
+        usr_password: usr_password.current.value,
+        usr_type : usr_type.current.value
     
+      }
+
+      try{
+
+        const body = data;
+
+        const response = await fetch("http://localhost:3001/signup", {
+
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(body)
+
+        });
+        
+        //console.log(response);
+
+        /*if(response.status === 200){
+          navigate("/");
         }
+        */
+       
+        const parseRes = await response.json();
 
-        try{
+        console.log(parseRes);
 
-            const body = data;
+        localStorage.setItem("token", parseRes.token);
+        setAuth(true);
 
-            const response = await fetch("http://localhost:3001/signup", {
-
-                method: "POST",
-                headers: {"Content-Type": "application/json", jwt_token: localStorage.token},
-                body: JSON.stringify(body)
-
-            });
         
-            console.log(response);
-
-            if(response.status === 200){
-              navigate("/");
-            }
+      }
+      catch(err){
         
-        }
-        catch(err){
+        console.log(err.message)
         
-            console.log(err.message)
-        
-        }
+      }
     
-    }
-
+  }
   return (
     <div className="text-center col-md-6 mx-auto" id="loginDiv">
 

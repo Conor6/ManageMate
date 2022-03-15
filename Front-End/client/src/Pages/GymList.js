@@ -1,7 +1,8 @@
 import { useEffect, useState} from "react";
 import {useNavigate, useParams } from "react-router-dom";
+import Button from "react-bootstrap/Button";
 
-function GymList() {
+function GymList({setAuth}) {
 
   let navigate = useNavigate();
 
@@ -61,6 +62,7 @@ function GymList() {
           </tbody>
         </table>
 
+        
     </div>
   );
 }

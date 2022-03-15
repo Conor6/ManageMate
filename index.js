@@ -155,7 +155,7 @@ app.post('/signup', validInfo, async(req, res) => {
 
 })
 
-app.get('/gymlist', async(req, res) => {
+app.get('/gymlist', authorisation, async(req, res) => {
   try {
 
 
@@ -163,7 +163,8 @@ app.get('/gymlist', async(req, res) => {
       "SELECT * FROM gym;", 
     );
     
-    res.json(select);
+    //res.json(select);
+    res.json(req.user);
 
       
   } 

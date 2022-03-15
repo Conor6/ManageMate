@@ -4,9 +4,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import {Navbar, Container, Nav} from 'react-bootstrap';
 
 
-
-
-
 function GymProfile() {
     
     let navigate = useNavigate();

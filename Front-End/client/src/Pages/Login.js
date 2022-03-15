@@ -3,55 +3,53 @@ import Button from "react-bootstrap/Button";
 import { useRef} from "react";
 import {useNavigate } from "react-router-dom";
 
-function Login() {
+function Login({setAuth}) {
 
   let navigate = useNavigate();
 
-    const usr_email = useRef(null);
-    const usr_password = useRef(null);
+  const usr_email = useRef(null);
+  const usr_password = useRef(null);
     
 
-    const loginUser =  async e => {
+  const loginUser =  async () => {
 
-        const data = {
+      const data = {
       
-            usr_email: usr_email.current.value,
-            usr_password: usr_password.current.value
+        usr_email: usr_email.current.value,
+        usr_password: usr_password.current.value
     
+      }
+
+      try{
+
+        const body = data;
+
+        const response = await fetch("http://localhost:3001/login", {
+
+          method: "POST",
+          headers: {"Content-Type": "application/json", },
+          body: JSON.stringify(body)
+
+        });
+        
+        console.log(response.status);
+
+        if(response.status === 200){
+
+          navigate("/gymlist");
+
+          console.log("Navigating...");
+
         }
-
-        try{
-
-            const body = data;
-
-            const response = await fetch("http://localhost:3001/login", {
-
-                method: "POST",
-                headers: {"Content-Type": "application/json", },
-                body: JSON.stringify(body)
-
-            });
         
-            console.log(response.status);
-
-            if(response.status === 200){
-
-              navigate("/gymlist");
-
-              console.log("Navigating...");
-
-
-
-            }
+      }
+      catch(err){
         
-        }
-        catch(err){
+          console.log(err.message)
         
-            console.log(err.message)
-        
-        }
+      }
     
-    }
+  }
 
   return (
     <div className="text-center col-md-6 mx-auto" id="loginDiv">
@@ -71,7 +69,7 @@ function Login() {
 
         </Form.Group>
 
-        <Button id="loginBtn" variant="primary" onClick={()=> loginUser()}>Login</Button>
+        <Button id="loginBtn" variant="primary" onClick={()=> setAuth(true)}>Login</Button>
 
       </Form>
     </div>
