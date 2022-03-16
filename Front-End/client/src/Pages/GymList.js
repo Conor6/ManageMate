@@ -1,8 +1,10 @@
 import { useEffect, useState} from "react";
 import {useNavigate, useParams } from "react-router-dom";
-import Button from "react-bootstrap/Button";
 
 function GymList({setAuth}) {
+
+  setAuth(true);
+  
 
   let navigate = useNavigate();
 
@@ -10,8 +12,13 @@ function GymList({setAuth}) {
 
   const getGyms =  async () => {
         
+    
+    const res = await fetch("http://localhost:3001/gymlist",{
 
-    const res = await fetch("http://localhost:3001/gymlist");
+      method: "GET",
+      headers: {token: localStorage.token}
+
+    });
     const jsonData = await res.json();
     const data = jsonData.rows;
   

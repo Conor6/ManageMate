@@ -12,7 +12,7 @@ app.use(express.json());
 
 
 
-app.post('/addcourt', async(req, res) => {
+app.post('/addcourt', authorisation, async(req, res) => {
   try {
 
     const { gym_id } = req.body;
@@ -163,7 +163,7 @@ app.get('/gymlist', authorisation, async(req, res) => {
       "SELECT * FROM gym;", 
     );
     
-    //res.json(select);
+    res.json(select);
     res.json(req.user);
 
       

@@ -19,6 +19,7 @@ function GymProfile() {
         console.log(gym_name);
 
         navigate(`/addcourt/${gym_name}`);
+        
 
 
     }

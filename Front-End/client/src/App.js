@@ -10,6 +10,7 @@ import AddGym from './Pages/AddGym';
 import GymList from './Pages/GymList';
 import GymProfile from './Pages/GymProfile';
 import Dashboard from './Pages/Dashboard';
+import Schedule from './Pages/Schedule';
 
 
 function App() {
@@ -18,7 +19,32 @@ function App() {
 
   const setAuth = (boolean) => {
     setIsAuthenticated(boolean);
+  };
+
+  async function stillAuth() {
+    try{
+
+      const response = await fetch("http://localhost:3001/verify",{
+
+        method: "GET",
+        headers: {token: localStorage.token}
+      });
+
+      const parseRes = await response.json();
+
+      parseRes === true ? setIsAuthenticated(true) : setIsAuthenticated(false);
+
+    }
+    catch(err){
+
+      console.log(err.message);
+
+    }
   }
+
+  useEffect(() => {
+    stillAuth()
+  }, [])
 
   return (
 
@@ -38,7 +64,7 @@ function App() {
       <Router>
       <Routes>
 
-        <Route path="/" element={ !isAuthenticated ? ( <Login setAuth={setAuth}/> ) : (<Navigate to="/dashboard"/>)} />
+        <Route path="/" element={ !isAuthenticated ? ( <Login setAuth={setAuth}/> ) : (<Navigate to="/gymlist"/>)} />
 
         <Route path="/signup" element={ !isAuthenticated ? ( <SignUp setAuth={setAuth}/> ) : (<Navigate to="/"/>)} />
 
@@ -51,6 +77,8 @@ function App() {
         <Route path="/gymprofile/:gym_name" element={<GymProfile />} />
 
         <Route path="/dashboard" element={ isAuthenticated ? ( <Dashboard setAuth={setAuth}/> ) : (<Navigate to="/"/>)} />
+
+        <Route path="/schedule" element={<Schedule/> } />
 
       </Routes>
 

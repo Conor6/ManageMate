@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/Conor6/ManageMate#readme",
   "dependencies": {
+    "@devexpress/dx-react-core": "^3.0.2",
+    "@devexpress/dx-react-scheduler": "^3.0.2",
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",

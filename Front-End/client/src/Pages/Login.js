@@ -1,11 +1,10 @@
 import { Form } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import { useRef} from "react";
-import {useNavigate } from "react-router-dom";
 
 function Login({setAuth}) {
 
-  let navigate = useNavigate();
+  //let navigate = useNavigate();
 
   const usr_email = useRef(null);
   const usr_password = useRef(null);
@@ -32,7 +31,6 @@ function Login({setAuth}) {
 
       });
 
-
       const parseRes = await response.json();
 
       localStorage.setItem("token", parseRes.token);
@@ -46,7 +44,6 @@ function Login({setAuth}) {
     }
     
   }
-
   return (
     <div className="text-center col-md-6 mx-auto" id="loginDiv">
 
