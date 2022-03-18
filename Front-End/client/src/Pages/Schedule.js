@@ -11,46 +11,68 @@ import { AppointmentForm } from '@devexpress/dx-react-scheduler-material-ui';
 function Schedule() {
 
   const appointments = [
-    { title: 'Mail New Leads for Follow Up', startDate: '2022-03-17T10:00' },
+    { title: 'Mail New Leads for Follow Up', startDate: '2022-03-18T10:00' },
     { title: 'Product Meeting', startDate: '2022-03-18T14:00', endDate: '2022-03-18T16:00' },
-    { title: 'Send Territory Sales Breakdown', startDate: '2022-03-19T22:00' },
+    { title: 'Send Territory Sales Breakdown', startDate: '2022-03-18T22:00' },
   ];
 
 
-  const [state, setState] = useState();
-
-  useEffect(() => {
-    setState({
-    data: appointments
-    });
-  }, [])
+  const [state, setState] = useState(appointments);
+  const [data, setData] = useState();
 
   //console.log(state);
+  //let test;
+  //console.log(typeof state);
+  //console.log(typeof test);
+  
 
   const commitChanges = ({added, changed, deleted}) => {
 
     setState((state)=>{
-      let {data} = state;
+
+      //console.log("State:")
+      //console.log(state);
+      //setData(state);
+
+      //console.log("Data:")
+      //console.log(data);
+
       if(added){
         const startingAddedId = data.length > 0 ? data[data.length -1].id +1 : 0;
-        data = [...data, { id: startingAddedId, ...added }];
+        //data = [...data, { id: startingAddedId, ...added }];
+        setData([...data, { id: startingAddedId, ...added }]);
       }
       if(changed){
-        data = data.map(appointment => (
-          changed[appointment.id] ? { ...appointment, ...changed[appointment.id] } : appointment));
+
+        //data = data.map(appointment => (
+        //  changed[appointment.id] ? { ...appointment, ...changed[appointment.id] } : appointment));
+        setData(data.map(appointment => (changed[appointment.id] ? { ...appointment, ...changed[appointment.id] } : appointment)));
       }
       if(deleted !== undefined){
-        data = data.filter(appointment => appointment.id !== deleted);
+        //data = data.filter(appointment => appointment.id !== deleted);
+        setData(data.filter(appointment => appointment.id !== deleted));
       }
       return {data};
     })
 
   }
+
+  //console.log(state);
+
   
-  const {data} = state;
+
+  useEffect(() => {
+    setData(state);
+  }, [])
+
+  //const {data} = state;
+
+  //console.log("Data");
+  //console.log(data);
+  
 
   return (
-    <Container >
+    <Container fluid>
       <Paper>
         <Scheduler
           data={data}
