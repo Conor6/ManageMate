@@ -6,19 +6,26 @@ import Paper from '@mui/material/Paper';
 import { ViewState, EditingState, IntegratedEditing } from '@devexpress/dx-react-scheduler';
 import { Scheduler, DayView, WeekView, Appointments, AppointmentTooltip, ConfirmationDialog, } from '@devexpress/dx-react-scheduler-material-ui';
 import { AppointmentForm } from '@devexpress/dx-react-scheduler-material-ui';
+import { formControlLabelClasses } from "@mui/material";
 
 
 function Schedule() {
 
   const appointments = [
-    { title: 'Mail New Leads for Follow Up', startDate: '2022-03-18T10:00' },
-    { title: 'Product Meeting', startDate: '2022-03-18T14:00', endDate: '2022-03-18T16:00' },
-    { title: 'Send Territory Sales Breakdown', startDate: '2022-03-18T22:00' },
+    {  id: 1, title:'Mail New Leads for Follow Up', startDate: '2022-03-18T10:00' },
+    {  id: 2, title: 'Product Meeting', startDate: '2022-03-18T14:00', endDate: '2022-03-18T16:00' },
+    {  id: 3, title: 'Send Territory Sales Breakdown', startDate: '2022-03-18T22:00' },
   ];
 
 
   const [state, setState] = useState(appointments);
-  const [data, setData] = useState();
+  const [data, setData] = useState(state);
+
+  //let bob = "bob";
+
+  //setData(bob);
+  //console.log("Data:");
+  //console.log(data);
 
   //console.log(state);
   //let test;
@@ -28,47 +35,78 @@ function Schedule() {
 
   const commitChanges = ({added, changed, deleted}) => {
 
-    setState((state)=>{
-
-      //console.log("State:")
-      //console.log(state);
-      //setData(state);
-
-      //console.log("Data:")
-      //console.log(data);
+    setState(()=>{
 
       if(added){
+
         const startingAddedId = data.length > 0 ? data[data.length -1].id +1 : 0;
         //data = [...data, { id: startingAddedId, ...added }];
-        setData([...data, { id: startingAddedId, ...added }]);
+
+        let test = [...data, { id: startingAddedId, ...added }]
+        //console.log("test");
+        //console.log(test);
+
+        setData(test);
+        console.log("if(added)");
+        console.log(data);
+        
       }
+
+      console.log("outside if(added)");
+      console.log(data);
+
       if(changed){
 
         //data = data.map(appointment => (
         //  changed[appointment.id] ? { ...appointment, ...changed[appointment.id] } : appointment));
+
+        //console.log(data.map(appointment => (changed[appointment.id] ? { ...appointment, ...changed[appointment.id] } : appointment)));
+
         setData(data.map(appointment => (changed[appointment.id] ? { ...appointment, ...changed[appointment.id] } : appointment)));
+
+        
+
       }
+
+
       if(deleted !== undefined){
         //data = data.filter(appointment => appointment.id !== deleted);
         setData(data.filter(appointment => appointment.id !== deleted));
+        console.log("if(deleted)");
+        console.log(data);
       }
-      return {data};
+      
+      console.log("state");
+      console.log(state);
+
+      return { data };
+
     })
+
+    //setState(data);
+    console.log("After changes");
+    console.log(state);
 
   }
 
-  //console.log(state);
 
   
 
   useEffect(() => {
+    console.log("Use Effect");
     setData(state);
+    console.log(state);
   }, [])
-
+  
   //const {data} = state;
 
-  //console.log("Data");
-  //console.log(data);
+  console.log("Data");
+  console.log(data);
+
+
+  console.log("state 2");
+  console.log(state);
+
   
 
   return (

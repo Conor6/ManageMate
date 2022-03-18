@@ -11,6 +11,7 @@ import GymList from './Pages/GymList';
 import GymProfile from './Pages/GymProfile';
 import Dashboard from './Pages/Dashboard';
 import Schedule from './Pages/Schedule';
+import S2 from './Pages/S2';
 
 
 function App() {
@@ -79,6 +80,7 @@ function App() {
         <Route path="/dashboard" element={ isAuthenticated ? ( <Dashboard setAuth={setAuth}/> ) : (<Navigate to="/"/>)} />
 
         <Route path="/schedule" element={<Schedule/> } />
+        <Route path="/S2" element={<S2/> } />
 
       </Routes>
 
