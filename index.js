@@ -174,6 +174,25 @@ app.get('/gymlist', authorisation, async(req, res) => {
 
 })
 
+app.post('/appointment', async(req, res) =>{
+
+  const { booking_id, booking_title, start_date, end_date} = req.body;
+
+  try {
+
+    const insertAppointment = await pool.query(
+      "INSERT INTO booking_table (booking_id, booking_title, start_date, end_date) VALUES($1, $2, $3, $4)", 
+      [booking_id, booking_title, start_date, end_date]
+    );
+
+    res.json(insertAppointment);
+
+    
+  } catch (error) {
+    console.log(error);
+  }
+})
+
 
 
 app.listen(3001, function() {
