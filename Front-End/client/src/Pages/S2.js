@@ -12,6 +12,8 @@ import {
 
 //import { appointments } from '../../../demo-data/appointments';
 
+
+
 const appointments = [
     { id: 1,title: 'Mail New Leads for Follow Up', startDate: '2022-03-18T10:00' },
     { id: 2, title: 'Product Meeting', startDate: '2022-03-18T14:00', endDate: '2022-03-18T16:00' },

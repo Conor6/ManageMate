@@ -12,6 +12,7 @@ import GymProfile from './Pages/GymProfile';
 import Dashboard from './Pages/Dashboard';
 import Schedule from './Pages/Schedule';
 import S2 from './Pages/S2';
+import S3 from './Pages/S3';
 
 
 function App() {
@@ -81,6 +82,7 @@ function App() {
 
         <Route path="/schedule" element={<Schedule/> } />
         <Route path="/S2" element={<S2/> } />
+        <Route path="/S3" element={<S3/> } />
 
       </Routes>
 
