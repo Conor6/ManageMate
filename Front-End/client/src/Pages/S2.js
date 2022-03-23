@@ -15,9 +15,9 @@ import {
 
 
 const appointments = [
-    { id: 1,title: 'Mail New Leads for Follow Up', startDate: '2022-03-18T10:00' },
-    { id: 2, title: 'Product Meeting', startDate: '2022-03-18T14:00', endDate: '2022-03-18T16:00' },
-    { id: 3, title: 'Send Territory Sales Breakdown', startDate: '2022-03-18T22:00' },
+    { id: 1,title: 'Mail New Leads for Follow Up', startDate: '2022-03-23T10:30:00.000Z' },
+    { id: 2, title: 'Product Meeting', startDate: '2022-03-23T11:30:00.000Z', endDate: '2022-03-23T12:00:00.000Z' },
+    { id: 3, title: 'Send Territory Sales Breakdown', startDate: '2022-03-22T22:00' },
   ];
 
 export default class Demo extends React.PureComponent {
@@ -65,7 +65,7 @@ export default class Demo extends React.PureComponent {
           height={660}
         >
           <ViewState
-            currentDate={currentDate}
+            //currentDate={currentDate}
           />
           <EditingState
             onCommitChanges={this.commitChanges}

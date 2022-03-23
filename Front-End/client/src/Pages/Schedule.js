@@ -6,21 +6,11 @@ import Paper from '@mui/material/Paper';
 import { ViewState, EditingState, IntegratedEditing } from '@devexpress/dx-react-scheduler';
 import { Scheduler, DayView, WeekView, Appointments, AppointmentTooltip, ConfirmationDialog, Toolbar, DateNavigator, TodayButton, } from '@devexpress/dx-react-scheduler-material-ui';
 import { AppointmentForm } from '@devexpress/dx-react-scheduler-material-ui';
-import { formControlLabelClasses, } from "@mui/material";
+import { colors, formControlLabelClasses, } from "@mui/material";
 
 
 function Schedule() {
 
- /*const appointments = [
-
-  {  id: 1, title:'Mail New Leads for Follow Up', startDate: '2022-03-21T11:30:00.000Z', uid: 3},
-    {  id: 2, title: 'Product Meeting', startDate: '2022-03-21T14:00', endDate: '2021-03-21T16:00' },
-    {  id: 3, title: 'Send Territory Sales Breakdown', startDate: '2022-03-19T22:00' },
-    {  id: 4, title: 'test', startDate: 'Mon Mar 14 2022 11:00:00 GMT+0000 (Greenwich Mean Time)', endDate: 'Mon Mar 14 2022 11:30:00 GMT+0000 (Greenwich Mean Time)', allDay: false}
-
-  ];
-  */
-  
   const [appointments, setAppointments] = useState([]);
   const [data, setData] = useState(appointments);
 
@@ -47,7 +37,6 @@ function Schedule() {
 
     getAppointments();
 
-    setData(appointments);
 
   }, []);
 
@@ -89,21 +78,71 @@ function Schedule() {
 
       }
 
-
       if(changed){
 
-        //data = data.map(appointment => (
-        //  changed[appointment.id] ? { ...appointment, ...changed[appointment.id] } : appointment));
+        const updateApp = async (apps)=> {
 
+          const data = {
+        
+            id: apps.id,
+            title: apps.title,
+            startDate: apps.startDate,
+            endDate: apps.endDate,
+
+          };
+
+          console.log(data);
+
+          let body = data;
+
+          const response = await fetch("http://localhost:3001/update-appointment", {
+
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(body)
+
+          });
+
+          console.log("Test");
+
+        }
+        
         setData(data.map(appointment => (changed[appointment.id] ? { ...appointment, ...changed[appointment.id] } : appointment)));
 
+        
+        let changedApp = data.find(appointment => (changed[appointment.id]));
+        let changedId = changedApp.id;
+
+        let apps = data.map(appointment => (changed[appointment.id] ? { ...appointment, ...changed[appointment.id] } : appointment));
+        console.log(apps[changedId]);
+
+        updateApp(apps[changedId]);
       }
 
       if(deleted !== undefined){
 
-        //data = data.filter(appointment => appointment.id !== deleted);
-        setData(data.filter(appointment => appointment.id !== deleted));
+        let app = deleted;
 
+        const deleteApp = async (app)=> {
+
+          const data = {
+        
+            id: app,
+
+          };
+
+          let body = data;
+
+          const response = await fetch("http://localhost:3001/delete-appointment", {
+
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(body)
+
+          });
+        }
+        deleteApp(app);
+        setData(data.filter(appointment => appointment.id !== deleted));
       }
 
       return { data };
@@ -111,12 +150,7 @@ function Schedule() {
 
   }
 
-  useEffect(() => {
-
-    setData(appointments);
-
-  }, []);
-
+  
   return (
     <Container fluid>
       <Paper>
