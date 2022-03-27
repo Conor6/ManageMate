@@ -240,11 +240,6 @@ app.post('/update-appointment', async(req,res) => {
 
     const {id, title, startDate, endDate,} = req.body;
 
-    console.log(id);
-    console.log(title);
-    console.log(startDate);
-    console.log(endDate);
-
     const updateAppointment = await pool.query(
       'UPDATE booking_table SET title = $2, "startDate" = $3, "endDate" = $4 WHERE id = $1', 
       [id, title, startDate, endDate,]
