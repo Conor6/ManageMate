@@ -192,8 +192,6 @@ function Schedule() {
 
         booking[startingAddedId].title = booking[startingAddedId].activity + "-" + booking[startingAddedId].gym;
 
-        console.log(booking[startingAddedId].title)
-
         const addBooking = async (booking, startingAddedId) => {
           
           const data = {
@@ -203,6 +201,9 @@ function Schedule() {
             end_date: booking[startingAddedId].endDate,
             rRule: booking[startingAddedId].rRule,
             usr_id: userData.usr_id,
+            activity: booking[startingAddedId].activity,
+            gym: booking[startingAddedId].gym,
+            
           };
 
           let body = data;
@@ -228,6 +229,8 @@ function Schedule() {
             endDate: apps.endDate,
             rRule: apps.rRule,
             usr_id: userData.usr_id,
+            activity: apps.activity,
+            gym: apps.gym,
             
           };
 
@@ -238,21 +241,63 @@ function Schedule() {
             body: JSON.stringify(body)
           });
         }
-        
-        setData(data.map(appointment => (changed[appointment.id] ? { ...appointment, ...changed[appointment.id] } : appointment)));
 
         let changedApp = data.find(appointment => (changed[appointment.id]));
         let changedId = changedApp.id;
+
+        console.log("gyms array");
+        console.log(activities[changed[changedId].activity-1].text)
+
+
+        if(changed[changedId].activity && changed[changedId].gym != undefined){
+
+          console.log("Gym");
+          console.log(changed[changedId].gym)
+          console.log(typeof changed[changedId].gym);
+
+          console.log("Activity");
+          console.log(changed[changedId].activity)
+          console.log(typeof changed[changedId].activity);
+         
+
+          //Set activity to text version
+          if(typeof changed[changedId].activity === "number"){
+            console.log("Is number activity");
+
+            changed[changedId].activity = activities[changed[changedId].activity-1].text;
+
+            console.log("activity afterwards")
+            console.log(changed[changedId].activity)
+
+          }
+
+          //Set gym to text version
+          if(typeof changed[changedId].gym === "number"){
+
+            console.log("Is number gym");
+
+            changed[changedId].gym = gyms[changed[changedId].gym-1].text;
+            console.log("activity afterwards")
+            console.log(changed[changedId].gym)
+          }
+          
+          changed[changedId].title = changed[changedId].activity + " - " + changed[changedId].gym;
+
+        }
+        
+
+        //Change the title of the changed appointment to the activity + gym
+        //changed[changedId].title = "tesss";
+
         let apps = data.map(appointment => (changed[appointment.id] ? { ...appointment, ...changed[appointment.id] } : appointment));
 
-        console.log("changed app");
-        console.log(changedApp)
 
-        console.log("apps");
-        console.log(apps[changedId]);
-
-
+        //Call function to update the appointment in the database
         updateApp(apps[changedId]);
+
+        setData(data.map(appointment => (changed[appointment.id] ? { ...appointment, ...changed[appointment.id] } : appointment))
+        );
+
       }
 
       if(deleted !== undefined){
