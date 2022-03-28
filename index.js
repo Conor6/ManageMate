@@ -23,14 +23,11 @@ app.post('/addcourt', authorisation, async(req, res) => {
       "INSERT INTO court (gym_id, crt_name, crt_desc) VALUES($1, $2, $3)", 
       [gym_id, crt_name, crt_desc]
     );
-
     res.json(insert);
-
   } 
   catch (error) {
     console.log(error.message);
   }
-
 })
 
 //Post request to log a user in
@@ -53,7 +50,6 @@ app.post('/login', validInfo, async(req, res) => {
     //Get the password that is stored in the database
     let db_password = user.rows[0].usr_password;
 
-  
     //Compare the database password and the password that the user entered
     const validPassword = await bcrypt.compare(password, db_password);
 
@@ -61,7 +57,6 @@ app.post('/login', validInfo, async(req, res) => {
     if(!validPassword){
 
       return res.status(401).json("Email or Password incorrect!");
-
     }
 
     //Generate token for the user
@@ -69,16 +64,12 @@ app.post('/login', validInfo, async(req, res) => {
     
     res.json({token});
 
-
   } 
   catch (error) {
 
     console.log(error.message);
-
     res.status(500).send("Server Error");
-
   }
-
 })
 
 app.get("/verify", authorisation, async (req,res) => {
@@ -86,14 +77,11 @@ app.get("/verify", authorisation, async (req,res) => {
   try{
 
     res.json(true);
-
   }
   catch(error) {
 
     console.error(error.message)
-
   }
-
 });
 
 app.post('/addgym', async(req, res) => {
@@ -123,7 +111,6 @@ app.post('/signup', validInfo, async(req, res) => {
   try {
 
     const { usr_email, usr_password, usr_type} = req.body;
-
     const saltRounds = 10;
     const salt = await bcrypt.genSalt(saltRounds);
     const hash = await bcrypt.hash(usr_password, salt);
@@ -136,15 +123,11 @@ app.post('/signup', validInfo, async(req, res) => {
     const checkUser = await pool.query("SELECT * FROM user_table WHERE usr_email = $1", 
     [usr_email]);
 
-
-
     let db_id = checkUser.rows[0].usr_id;
     let db_email = checkUser.rows[0].usr_email;
     let db_user_type = checkUser.rows[0].usr_type;
 
     const token = jwtGenerator(db_id, db_email, db_user_type);
-
-    console.log(token);
 
     return res.json({ token });
 
@@ -158,36 +141,27 @@ app.post('/signup', validInfo, async(req, res) => {
 app.get('/gymlist', authorisation, async(req, res) => {
   try {
 
-
     const select = await pool.query(
       "SELECT * FROM gym;", 
     );
-    
-    res.json(select);
-    res.json(req.user);
 
-      
+    res.json(select);
   } 
   catch (error) {
-    console.log(error.message);
+    console.log(error);
   }
 
 })
 
 app.post('/appointment', async(req, res) =>{
 
-  const { id, title, start_date, end_date} = req.body;
-
-  console.log(id);
-  console.log(title);
-  console.log(start_date);
-  console.log(end_date);
+  const { id, title, start_date, end_date, rRule, usr_id}  = req.body;
 
   try {
 
     const insertAppointment = await pool.query(
-      'INSERT INTO booking_table (id, title, "startDate", "endDate") VALUES($1, $2, $3, $4)', 
-      [id, title, start_date, end_date]
+      'INSERT INTO booking_table (id, title, "startDate", "endDate", "rRule", usr_id) VALUES($1, $2, $3, $4, $5, $6)', 
+      [id, title, start_date, end_date,rRule, usr_id]
     );
 
     res.json(insertAppointment);
@@ -225,10 +199,8 @@ app.post('/delete-appointment', async(req,res) => {
       [id]
     );
     
-
     res.json(deleteAppointment);
 
-    
   } catch (error) {
     console.log(error);
   }
@@ -238,11 +210,11 @@ app.post('/update-appointment', async(req,res) => {
 
   try {
 
-    const {id, title, startDate, endDate,} = req.body;
+    const {id, title, startDate, endDate, rRule, usr_id} = req.body;
 
     const updateAppointment = await pool.query(
-      'UPDATE booking_table SET title = $2, "startDate" = $3, "endDate" = $4 WHERE id = $1', 
-      [id, title, startDate, endDate,]
+      'UPDATE booking_table SET title = $2, "startDate" = $3, "endDate" = $4, "rRule" = $5, usr_id = $6 WHERE id = $1', 
+      [id, title, startDate, endDate, rRule, usr_id]
     );
     
     res.json(updateAppointment);
@@ -252,7 +224,33 @@ app.post('/update-appointment', async(req,res) => {
   }
 });
 
+app.get('/getgyms', async(req,res) => {
 
+  try {
+
+    const getGyms = await pool.query(
+      "SELECT gym_name FROM gym;"
+    );
+
+    res.json(getGyms);
+
+    
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+app.get('/user-info', authorisation, async(req,res) => {
+
+  try {
+
+    res.json(req.user);
+
+    
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 app.listen(3001, function() {
 

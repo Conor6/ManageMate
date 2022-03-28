@@ -1,50 +1,87 @@
-import * as React from "react";
-import Paper from "@material-ui/core/Paper";
+import * as React from 'react';
+import Paper from '@mui/material/Paper';
 import {
-  ViewState,
-  EditingState,
-  IntegratedEditing
-} from "@devexpress/dx-react-scheduler";
+  ViewState, GroupingState, IntegratedGrouping, IntegratedEditing, EditingState,
+} from '@devexpress/dx-react-scheduler';
 import {
   Scheduler,
-  DayView,
+  Resources,
   Appointments,
-  AppointmentForm,
   AppointmentTooltip,
-  ConfirmationDialog
-} from "@devexpress/dx-react-scheduler-material-ui";
+  GroupingPanel,
+  DayView,
+  DragDropProvider,
+  AppointmentForm,
+} from '@devexpress/dx-react-scheduler-material-ui';
+import {
+  teal, indigo,
+} from '@mui/material/colors';
 
-//import { appointments } from "../../../demo-data/appointments";
-const appointments = [
-  {  id: 1, title:'Mail New Leads for Follow Up', startDate: '2022-03-22T10:00', uid: 3},
-  {  id: 2, title: 'Product Meeting', startDate: '2022-03-22T14:00', endDate: '2022-03-22T16:00' },
-  {  id: 3, title: 'Send Territory Sales Breakdown', startDate: '2022-03-19T22:00' },
-  {  id: 4, title: 'test', startDate: 'Mon Mar 22 2022 11:00:00 GMT+0000 (Greenwich Mean Time)', endDate: 'Mon Mar 22 2022 11:30:00 GMT+0000 (Greenwich Mean Time)', allDay: false},
-  {  id: 5, title: 'testing, startDate'}
+const appointments = [{
+  id: 0,
+  title: 'Watercolor Landscape',
+  members: [1, 2],
+  roomId: 1,
+  startDate: new Date(2017, 4, 28, 9, 30),
+  endDate: new Date(2017, 4, 28, 12, 0),
+}, {
+  id: 1,
+  title: 'Oil Painting for Beginners',
+  members: [1],
+  roomId: 2,
+  startDate: new Date(2017, 4, 28, 12, 30),
+  endDate: new Date(2017, 4, 28, 14, 30),
+}, {
+  id: 2,
+  title: 'Testing',
+  members: [1, 2],
+  roomId: 1,
+  startDate: new Date(2017, 4, 29, 12, 30),
+  endDate: new Date(2017, 4, 29, 14, 30),
+}, {
+  id: 3,
+  title: 'Final exams',
+  members: [1, 2],
+  roomId: 2,
+  startDate: new Date(2017, 4, 29, 9, 30),
+  endDate: new Date(2017, 4, 29, 12, 0),
+}];
+
+const owners = [{
+  text: 'Court 1',
+  id: 1,
+  color: indigo,
+}, {
+  text: 'Court 2',
+  id: 2,
+  color: teal,
+}];
+
+const locations = [
+  { text: 'Pres', id: 1 },
+  { text: 'NBA', id: 2 },
 ];
-
-const messages = {
-  moreInformationLabel: ""
-};
-
-const TextEditor = (props) => {
-  // eslint-disable-next-line react/destructuring-assignment
-  if (props.type === "multilineTextEditor") {
-    return null;
-  }
-  return <AppointmentForm.TextEditor {...props} />;
-};
-
-const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }) => {
-  return <div />;
-};
 
 export default class Demo extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       data: appointments,
-      currentDate: "2018-06-27"
+      resources: [{
+        fieldName: 'members',
+        title: 'Members',
+        instances: owners,
+        allowMultiple: true,
+      }, {
+        fieldName: 'roomId',
+        title: 'Location',
+        instances: locations,
+      }],
+      grouping: [{
+        resourceName: 'roomId',
+      }, {
+        resourceName: 'members',
+      }],
     };
 
     this.commitChanges = this.commitChanges.bind(this);
@@ -54,43 +91,56 @@ export default class Demo extends React.PureComponent {
     this.setState((state) => {
       let { data } = state;
       if (added) {
-        const startingAddedId =
-          data.length > 0 ? data[data.length - 1].id + 1 : 0;
+        const startingAddedId = data.length > 0 ? data[data.length - 1].id + 1 : 0;
         data = [...data, { id: startingAddedId, ...added }];
       }
       if (changed) {
-        data = data.map((appointment) =>
-          changed[appointment.id]
-            ? { ...appointment, ...changed[appointment.id] }
-            : appointment
-        );
+        data = data.map(appointment => (
+          changed[appointment.id] ? { ...appointment, ...changed[appointment.id] } : appointment));
       }
       if (deleted !== undefined) {
-        data = data.filter((appointment) => appointment.id !== deleted);
+        data = data.filter(appointment => appointment.id !== deleted);
       }
       return { data };
     });
   }
 
   render() {
-    const { currentDate, data } = this.state;
+    const { data, resources, grouping } = this.state;
 
     return (
       <Paper>
-        <Scheduler data={data}>
-          <ViewState currentDate={currentDate} />
-          <EditingState onCommitChanges={this.commitChanges} />
-          <IntegratedEditing />
-          <DayView startDayHour={9} endDayHour={15} />
-          <Appointments />
-          <AppointmentTooltip showOpenButton showDeleteButton />
-          <ConfirmationDialog />
-          <AppointmentForm
-            basicLayoutComponent={BasicLayout}
-            textEditorComponent={TextEditor}
-            selectComponent={Select}
-            messages={messages}
+        <Scheduler
+          data={data}
+        >
+          <ViewState
+            defaultCurrentDate="2017-05-28"
           />
+          <EditingState
+            onCommitChanges={this.commitChanges}
+          />
+          <GroupingState
+            grouping={grouping}
+          />
+
+          <DayView
+            startDayHour={9}
+            endDayHour={15}
+            intervalCount={2}
+          />
+          <Appointments />
+          <Resources
+            data={resources}
+            mainResourceName="members"
+          />
+
+          <IntegratedGrouping />
+          <IntegratedEditing />
+
+          <AppointmentTooltip showOpenButton />
+          <AppointmentForm />
+          <GroupingPanel />
+          <DragDropProvider />
         </Scheduler>
       </Paper>
     );

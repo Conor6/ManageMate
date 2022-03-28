@@ -59,6 +59,7 @@ function App() {
           <Nav.Link href="http://localhost:3000/">Home</Nav.Link>
           <Nav.Link href="http://localhost:3000/gymlist">Gym List</Nav.Link>
           <Nav.Link href="#my-team">My Team</Nav.Link>
+          <Nav.Link href="#my-bookings">My Bookings</Nav.Link>
         </Nav>
 
       </Navbar>

@@ -3,6 +3,8 @@ import {useNavigate, useParams } from "react-router-dom";
 
 function GymList({setAuth}) {
 
+  console.log(setAuth);
+
   let navigate = useNavigate();
 
   const [gym_data, setGymData] = useState([]);

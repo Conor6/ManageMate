@@ -15,55 +15,95 @@ function Schedule() {
   const [appointments, setAppointments] = useState([]);
   const [data, setData] = useState(appointments);
   const [currentViewName, setCurrentViewName] = useState("Week");
+  const [gyms, setGyms] = useState();
+  const [userData, setUserData] = useState();
 
   const ages = [{id: 1, text:"Academy"}, {id: 2, text:"U11"},{id: 3, text:"U12"},{id: 4, text:"U13"},{id: 5, text:"U14"},{id: 6, text:"U15"},
     {id: 7, text:"U16"},{id: 8, text:"U17"},{id: 9, text:"U18"},{id: 10, text:"U19"},{id: 11, text:"U20"},{id: 12, text:"Division 1"},
     {id: 13, text:"Divison 3"},{id: 14, text:"Divison 5"},{id: 15, text:"National League"},{id: 16, text:"Super League"},
   ];
 
-  const gender = [{id: 1, text:"Boys"}, {id:2, text:"Girls"}, {id: 3, text: "Men"}, {id: 4, text: "Women"}, {id:5, text: "Mixed"}];
-
   const activities = [{id: 1, text:"Training"}, {id:2, text:"Match"}, {id: 3, text: "Scrimmage"}, {id: 4, text: "Skills Session"}, {id:5, text: "Other"}];
+
+
+  const Label = (props) => {
+    // eslint-disable-next-line react/destructuring-assignment
+    if (props.text === 'Details') {
+      return <AppointmentForm.Label text="Create an appointment:" type="title"/> 
+    } 
+    if (props.text === 'More Information') {
+      return null;
+    } return <AppointmentForm.Label {...props} />;
+  };
 
   const TextEditor = (props) => {
     // eslint-disable-next-line react/destructuring-assignment
-    
     if (props.type === 'titleTextEditor') {
       return null;
     } 
     if (props.type === 'multilineTextEditor') {
       return null;
-    } 
-    return <AppointmentForm.TextEditor {...props} />;
+    } return <AppointmentForm.TextEditor {...props} />;
   };
 
-  const Label = (props =>{
-    console.log("Props")
-    console.log(props);
+  const Select = (props) => {
+    // eslint-disable-next-line react/destructuring-assignment
 
-    if (props.text === "Details") {
+    if (props.type === 'multilineTextEditor') {
       return null;
-    } 
-    if (props.text === "More Information") {
-      return null;
-    } 
-
-    return <AppointmentForm.Label {...props} />;
-  })
-
+    } return <AppointmentForm.Select {...props} />;
+  };
+  
   const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }) => {
+    const onActivityChange = (nextValue) => {
+      onFieldChange({ activity: nextValue });
+    };
 
+    const onGymChange = (nextValue) => {
+      onFieldChange({ gym: nextValue });
+    };
+  
+    if(appointmentData.activity === undefined){
+      appointmentData.activity = 1;
+    }
 
-
+    if(appointmentData.gym === undefined){
+      appointmentData.gym = 1;
+    }
 
     return (
+
       <AppointmentForm.BasicLayout
         appointmentData={appointmentData}
         onFieldChange={onFieldChange}
         {...restProps}
       >
-  
+        <AppointmentForm.Label
+          text="Activity"
+          type="title"
+        />
+        <AppointmentForm.Select
+          onValueChange={onActivityChange}
+          value={appointmentData.activity}
+          availableOptions={activities}
+          type="outlinedSelect"
+        />
+
+        <AppointmentForm.Label
+          text="Gym"
+          type="title"
+        />
+        <AppointmentForm.Select
+          onValueChange={onGymChange}
+          value={appointmentData.gym}
+          availableOptions={gyms}
+          type="outlinedSelect"
+        />
+
       </AppointmentForm.BasicLayout>
+
+      
+
     );
   };
 
@@ -72,6 +112,18 @@ function Schedule() {
 
     setCurrentViewName(currentViewName)
   }
+
+  const getUserData =  async () => {
+        
+    const res = await fetch("http://localhost:3001/user-info",{
+      method: "GET",
+      headers: {token: localStorage.token}
+    });
+
+    const jsonData = await res.json();
+    setUserData(jsonData);
+
+  };
 
   const getAppointments =  async () => {
         
@@ -86,9 +138,33 @@ function Schedule() {
 
   };
 
+  const getGyms =  async () => {
+        
+    const res = await fetch("http://localhost:3001/getgyms",{
+      method: "GET",
+      headers: {token: localStorage.token}
+    });
+
+    const jsonData = await res.json();
+    let apps = jsonData.rows;
+
+    let data = []
+    let i =1;
+
+    Object.keys(apps).forEach(key => {
+      
+      data.push({id: i, text: apps[key].gym_name })
+      i++;
+    })
+    setGyms(data);
+  };
+
   useEffect(() => {
 
     getAppointments();
+    getGyms();
+    getUserData();
+
 
   }, []);
 
@@ -98,23 +174,25 @@ function Schedule() {
 
       if(added){
 
-        if(added.ageMenu == undefined){
-          added.ageMenu = 1;
+        if(added.activity === undefined){
+          added.activity = 1;
         }
     
-        if(added.genderMenu == undefined){
-          added.genderMenu = 1;
+        if(added.gym === undefined){
+          added.gym = 1;
         }
 
-        if(added.ageMenu && added.genderMenu != undefined){
-          added.ageMenu = ages[added.ageMenu-1].text;
-          added.genderMenu = gender[added.genderMenu-1].text;
+        if(added.activity && added.gym != undefined){
+          added.activity = activities[added.activity-1].text;
+          added.gym = gyms[added.gym-1].text;
         }
 
         const startingAddedId = data.length > 0 ? data[data.length -1].id +1 : 0;
         let booking = [...data, { id: startingAddedId, ...added }]
 
-        booking[startingAddedId].title = booking[startingAddedId].ageMenu + " " + booking[startingAddedId].genderMenu;
+        booking[startingAddedId].title = booking[startingAddedId].activity + "-" + booking[startingAddedId].gym;
+
+        console.log(booking[startingAddedId].title)
 
         const addBooking = async (booking, startingAddedId) => {
           
@@ -123,6 +201,8 @@ function Schedule() {
             title: booking[startingAddedId].title,
             start_date: booking[startingAddedId].startDate,
             end_date: booking[startingAddedId].endDate,
+            rRule: booking[startingAddedId].rRule,
+            usr_id: userData.usr_id,
           };
 
           let body = data;
@@ -146,6 +226,9 @@ function Schedule() {
             title: apps.title,
             startDate: apps.startDate,
             endDate: apps.endDate,
+            rRule: apps.rRule,
+            usr_id: userData.usr_id,
+            
           };
 
           let body = data;
@@ -161,6 +244,14 @@ function Schedule() {
         let changedApp = data.find(appointment => (changed[appointment.id]));
         let changedId = changedApp.id;
         let apps = data.map(appointment => (changed[appointment.id] ? { ...appointment, ...changed[appointment.id] } : appointment));
+
+        console.log("changed app");
+        console.log(changedApp)
+
+        console.log("apps");
+        console.log(apps[changedId]);
+
+
         updateApp(apps[changedId]);
       }
 
@@ -197,41 +288,31 @@ function Schedule() {
             currentViewName={currentViewName}
             onCurrentViewNameChange={currentViewNameChange}
           />
-
           <EditingState onCommitChanges={commitChanges}/>
-
           <DayView startDayHour={9} endDayHour={23} />
-
           <WeekView startDayHour={17} endDayHour={23} />
-
           <WeekView
             name="Pres"
             displayName="Presentation"
             startDayHour={9}
             endDayHour={23}
           />
-
           <MonthView/>
-
           <Toolbar />
           <ViewSwitcher/>
           <DateNavigator />
           <TodayButton />
           <IntegratedEditing/>
-
           <ConfirmationDialog />
-          <Appointments />
+          <Appointments/>
           <AppointmentTooltip showOpenButton showDeleteButton />
 
           <AppointmentForm
             basicLayoutComponent={BasicLayout}
+            selectComponent={Select}
             textEditorComponent={TextEditor}
             labelComponent={Label}
           />
-
-          
-
-
 
         </Scheduler>
       </Paper>

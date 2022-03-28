@@ -6,16 +6,11 @@ require("dotenv").config();
 module.exports = function(req, res, next) {
   // Get token from header
   const token = req.header("token");
-  
-  console.log("Token in Authorisation");
-  console.log(token);
 
   // Check if not token
   if(!token) {
 
-    console.log("!token");
     return res.status(403).json({ msg: "authorization denied" });
-    
   }
 
   // Verify token
