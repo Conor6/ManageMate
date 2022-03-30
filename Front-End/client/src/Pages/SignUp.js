@@ -1,6 +1,6 @@
-import { Form } from "react-bootstrap";
+import { Form, } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import {useNavigate } from "react-router-dom";
 import Dropdown from "react-bootstrap/Dropdown";
 
@@ -11,7 +11,11 @@ function SignUp({setAuth}) {
     const usr_email = useRef(null);
     const usr_password = useRef(null);
     const usr_type = useRef(null);
+
+    const [value, setValue] = useState();
     
+    
+    const options = [{id: 1, name: "Manager"},{id: 2, name: "Coach"}, {id: 3, name: "Comittee Member"}];
 
     const signUpUser =  async () => {
 
@@ -44,7 +48,7 @@ function SignUp({setAuth}) {
        
         const parseRes = await response.json();
 
-        console.log(parseRes);
+        //console.log(parseRes);
 
         localStorage.setItem("token", parseRes.token);
         setAuth(true);
@@ -66,19 +70,39 @@ function SignUp({setAuth}) {
       <Form>
         <Form.Group className="mb-3" controlId="userEmail">
 
+          <Form.Label htmlFor="inputText5">Email</Form.Label>
           <Form.Control className="text-center col-md-6 mx-auto" type="email" placeholder="Email" ref = {usr_email}/>
           
         </Form.Group>
 
         <Form.Group className="mb-3" id="usrPassword" controlId="Password">
 
+          <Form.Label htmlFor="inputPassword5">Password</Form.Label>
           <Form.Control className="text-center col-md-6 mx-auto" type="password" placeholder="Password" ref = {usr_password}/>
 
         </Form.Group>
 
-        <Form.Group className="mb-3" id="usrPassword" controlId="Password">
+        <Form.Group className="mb-3" id="usrSelect" controlId="Select">
 
-          <Form.Control className="text-center col-md-6 mx-auto" type="text" placeholder="Select User Type" ref = {usr_type}/>
+          <Form.Label htmlFor="inputText5">User Type</Form.Label>
+
+          <Form.Select 
+            className="text-center col-md-6 mx-auto" 
+            type="text" placeholder="Select User Type" 
+            ref = {usr_type}
+            value = {value}
+            onChange={(e) => setValue(e.target.value)}
+          >
+
+          {options.map((o) => {
+
+            const { name} = o;
+              return <option value={name}>{name}</option>;
+          })}
+
+          </Form.Select>
+
+         
 
         </Form.Group>
 

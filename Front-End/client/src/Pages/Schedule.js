@@ -7,7 +7,6 @@ import { ViewState, EditingState, IntegratedEditing } from '@devexpress/dx-react
 import { Scheduler, DayView, WeekView, Appointments, AppointmentTooltip, ConfirmationDialog, Toolbar, DateNavigator, TodayButton, ViewSwitcher, MonthView, EditRecurrenceMenu, } from '@devexpress/dx-react-scheduler-material-ui';
 import { AppointmentForm } from '@devexpress/dx-react-scheduler-material-ui';
 import { colors, formControlLabelClasses, } from "@mui/material";
-import './Schedule.css';
 
 
 function Schedule(props) {
@@ -32,7 +31,7 @@ function Schedule(props) {
   const Label = (props) => {
     // eslint-disable-next-line react/destructuring-assignment
     if (props.text === 'Details') {
-      return <AppointmentForm.Label text="Create an appointment:" type="title"/> 
+      return <AppointmentForm.Label text="Create Booking:" type="title"/> 
     } 
     if (props.text === 'More Information') {
       return null;
@@ -304,7 +303,7 @@ function Schedule(props) {
     })
   }
   return (
-    <Container fluid>
+    <Container>
       <Paper>
         <Scheduler data={data} height={700} >
 

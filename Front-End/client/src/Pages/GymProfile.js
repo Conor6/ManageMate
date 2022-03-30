@@ -1,4 +1,4 @@
-import './GymProfile.css';
+import '../CSS/GymProfile.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { useNavigate, useParams } from "react-router-dom";
 import {Navbar, Container, Nav} from 'react-bootstrap';

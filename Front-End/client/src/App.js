@@ -1,7 +1,8 @@
 import './App.css';
 import { BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom';
-import {Navbar, Nav} from 'react-bootstrap';
+import {Navbar, Nav, Container} from 'react-bootstrap';
 import { useEffect, useState} from "react";
+import { StyledEngineProvider } from '@mui/material/styles';
 
 import Login from "./Pages/Login";
 import SignUp from "./Pages/SignUp";
@@ -13,18 +14,12 @@ import Dashboard from './Pages/Dashboard';
 import Schedule from './Pages/Schedule';
 import S2 from './Pages/S2';
 import S3 from './Pages/S3';
+import Sidebar from './Components/SideBar';
+import TeamProfile from './Pages/TeamProfile';
+import  AppBar  from './Components/AppBar';
 
 
 function App() {
-
-  const appointments = [
-    {  id: 1, title:'Mail New Leads for Follow Up', startDate: '2022-03-22T10:00', uid: 3},
-    {  id: 2, title: 'Product Meeting', startDate: '2022-03-22T14:00', endDate: '2022-03-22T16:00' },
-    {  id: 3, title: 'Send Territory Sales Breakdown', startDate: '2022-03-19T22:00' },
-    {  id: 4, title: 'test', startDate: 'Mon Mar 22 2022 11:00:00 GMT+0000 (Greenwich Mean Time)', endDate: 'Mon Mar 22 2022 11:30:00 GMT+0000 (Greenwich Mean Time)', allDay: false},
-    {  id: 5, title: 'testing, startDate'}
-  ];
-
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -60,45 +55,44 @@ function App() {
   return (
 
     <>
-      <Navbar className='navbar' bg="primary" variant="dark">
+      <StyledEngineProvider injectFirst>
 
-        <Navbar.Brand href="#home">ManageMate</Navbar.Brand>
+      
+        <Router>
 
-        <Nav className="me-auto">
-          <Nav.Link href="http://localhost:3000/">Home</Nav.Link>
-          <Nav.Link href="http://localhost:3000/gymlist">Gym List</Nav.Link>
-          <Nav.Link href="#my-team">My Team</Nav.Link>
-          <Nav.Link href="#my-bookings">My Bookings</Nav.Link>
-        </Nav>
+          <AppBar>
+            
+          </AppBar>        
 
-      </Navbar>
-    
-      <Router>
-      <Routes>
+          <Routes>
 
-        <Route path="/" element={ !isAuthenticated ? ( <Login setAuth={setAuth}/> ) : (<Navigate to="/gymlist"/>)} />
+            <Route path="/" element={ !isAuthenticated ? ( <Login setAuth={setAuth}/> ) : (<Navigate to="/gymlist"/>)} />
 
-        <Route path="/signup" element={ !isAuthenticated ? ( <SignUp setAuth={setAuth}/> ) : (<Navigate to="/"/>)} />
+            <Route path="/signup" element={ !isAuthenticated ? ( <SignUp setAuth={setAuth}/> ) : (<Navigate to="/"/>)} />
 
-        <Route path="/addcourt/:gym_id" element={ isAuthenticated ? ( <AddCourt setAuth={setAuth}/> ) : (<Navigate to="/"/>)} />
+            <Route path="/addcourt/:gym_id" element={ isAuthenticated ? ( <AddCourt setAuth={setAuth}/> ) : (<Navigate to="/"/>)} />
 
-        <Route path="/addgym" element={ isAuthenticated ? ( <AddGym setAuth={setAuth}/> ) : (<Navigate to="/"/>)} />
+            <Route path="/addgym" element={ isAuthenticated ? ( <AddGym setAuth={setAuth}/> ) : (<Navigate to="/"/>)} />
 
-        <Route path="/gymlist" element={ isAuthenticated ? ( <GymList setAuth={setAuth}/> ) : (<Navigate to="/"/>)} />
+            <Route path="/gymlist" element={ isAuthenticated ? ( <GymList setAuth={setAuth}/> ) : (<Navigate to="/"/>)} />
 
-        <Route path="/gymprofile/:gym_name" element={<GymProfile />} />
+            <Route path="/gymprofile/:gym_name" element={<GymProfile />} />
 
-        <Route path="/dashboard" element={ isAuthenticated ? ( <Dashboard setAuth={setAuth}/> ) : (<Navigate to="/"/>)} />
+            <Route path="/dashboard" element={ isAuthenticated ? ( <Dashboard setAuth={setAuth}/> ) : (<Navigate to="/"/>)} />
 
 
 
-        <Route path="/schedule" element={<Schedule /> } />
-        <Route path="/S2" element={<S2/> } />
-        <Route path="/S3" element={<S3/> } />
+            <Route path="/schedule" element={<Schedule /> } />
+            <Route path="/S2" element={<S2/> } />
+            <Route path="/S3" element={<S3/> } />
+            <Route path="/sidebar" element={<Sidebar/> } />
+            <Route path="/teamprofile" element={<TeamProfile/> } />
+            <Route path="/appbar" element={<AppBar/> } />
 
-      </Routes>
+          </Routes>
 
-      </Router>
+        </Router>
+      </StyledEngineProvider>
     </>
 
 
