@@ -15,6 +15,29 @@ app.use(cors());
 app.use(express.json());
 
 
+app.get("/create-account/:token", async(req,res) => {
+  const {token} = req.params;
+
+  console.log("Req params");
+  console.log(req.params);
+
+
+  jwt.verify(token, process.env.jwtSecret, (error, decoded) =>{
+
+    if(error){
+      console.log("Error");
+      console.log(error);
+    }
+    else{
+      res.send("Correct Email");
+    }
+
+  }) 
+
+
+})
+
+
 app.post("/send_mail", async(req,res) => {
 
   try{
@@ -193,7 +216,7 @@ app.post('/signup', validInfo, async(req, res) => {
     })
 
     
-    return res.json({ token });
+    //return res.json({ token });
 
   } 
   catch (error) {

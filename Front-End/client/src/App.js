@@ -18,6 +18,7 @@ import Sidebar from './Components/SideBar';
 import TeamProfile from './Pages/TeamProfile';
 import  AppBar  from './Components/AppBar';
 import Email from './Pages/Email';
+import CreateAccount from './Pages/CreateAccount';
 
 
 function App() {
@@ -90,6 +91,8 @@ function App() {
             <Route path="/teamprofile" element={<TeamProfile/> } />
             <Route path="/appbar" element={<AppBar/> } />
             <Route path="/email" element={<Email/> } />
+            <Route path="/create-account/:token" element={<CreateAccount/> } />
+
 
 
           </Routes>
