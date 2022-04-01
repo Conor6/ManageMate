@@ -17,6 +17,7 @@ import S3 from './Pages/S3';
 import Sidebar from './Components/SideBar';
 import TeamProfile from './Pages/TeamProfile';
 import  AppBar  from './Components/AppBar';
+import Email from './Pages/Email';
 
 
 function App() {
@@ -88,6 +89,8 @@ function App() {
             <Route path="/sidebar" element={<Sidebar/> } />
             <Route path="/teamprofile" element={<TeamProfile/> } />
             <Route path="/appbar" element={<AppBar/> } />
+            <Route path="/email" element={<Email/> } />
+
 
           </Routes>
 

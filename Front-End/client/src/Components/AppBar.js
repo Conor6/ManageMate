@@ -14,13 +14,34 @@ import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
-import List from '@mui/material/List';
-import { ImageList } from '@mui/material';
+import { ImageList, ImageListItem } from '@mui/material';
+import { List, ListItemButton } from '@mui/material';
+import SendIcon from '@mui/icons-material/Send';
+import HomeIcon from '@mui/icons-material/Home';
+import PersonIcon from '@mui/icons-material/Person';
+import EventNoteIcon from '@mui/icons-material/EventNote';
+import EventIcon from '@mui/icons-material/Event';
+import GroupsIcon from '@mui/icons-material/Groups';
+import ListAltIcon from '@mui/icons-material/ListAlt';
+import CssBaseline from "@material-ui/core/CssBaseline";
+import { makeStyles } from "@material-ui/core/styles";
+import '../CSS/Sidebar.css';
 
+const ListButton = styled(ListItemButton)({
+  color: 'black',
+  paddingRight: 10,
+  borderRadius: '20px',
+  marginLeft: 5,
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  '&:hover': {
+    backgroundColor: "white",
+    color: 'black',
+ },
 
-
+  
+});
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -80,26 +101,62 @@ export default function SearchAppBar() {
 
   const list = (anchor) => (
     <Box
-      sx={{ width: 250 }}
+      sx={{ height: '100%', width: 250, backgroundColor: '#2196f3', color: 'white', }}
       role="presentation"
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
-      <List>
-        {['Home', 'Club Schedule', 'Gym List', 'My Profile', 'My Team', 'My Bookings',].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
+
+      <List >
+
+        <ListButton className='test'>
+          <ListItemIcon sx={{'ListItemButton:hover': {color: 'black',}}}>
+            <HomeIcon></HomeIcon>
+          </ListItemIcon>
+          <ListItemText primary="Home" />
+        </ListButton>
+
+        <ListButton>
+          <ListItemIcon sx={{color: 'white',}}>
+          <PersonIcon></PersonIcon>
+          </ListItemIcon>
+          <ListItemText primary="Profile" />
+        </ListButton>
+
+        <ListButton>
+          <ListItemIcon sx={{color: 'white',}}>
+            <EventNoteIcon></EventNoteIcon>
+          </ListItemIcon>
+          <ListItemText primary="Schedule" />
+        </ListButton>
+
+        <ListButton>
+          <ListItemIcon sx={{color: 'white',}}>
+            <EventIcon></EventIcon>
+          </ListItemIcon>
+          <ListItemText primary="My Bookings" />
+        </ListButton>
+
+        <ListButton> 
+          <ListItemIcon sx={{color: 'white',}}>
+            <GroupsIcon></GroupsIcon>
+          </ListItemIcon>
+          <ListItemText primary="My Team" />
+        </ListButton>
+
+        <ListButton>
+          <ListItemIcon sx={{color: 'white',}}>
+            <ListAltIcon />
+          </ListItemIcon>
+          <ListItemText primary="Gym List" />
+        </ListButton>
+        
       </List>
 
     </Box>
   );
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1, backgroundColor: 'red' }}>
       <AppBar position="static" >
         <Toolbar>
         <IconButton
@@ -119,6 +176,7 @@ export default function SearchAppBar() {
             anchor={anchor}
             open={state[anchor]}
             onClose={toggleDrawer(anchor, false)}
+            
           >
             {list(anchor)}
           </Drawer>

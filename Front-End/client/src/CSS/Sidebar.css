@@ -1,3 +1,4 @@
-.test{
-  background-color: red;
+.test.Mui-focusVisible{
+  color: white;
+  width: 80%;
 }

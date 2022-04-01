@@ -6,9 +6,49 @@ const bcrypt = require("bcrypt");
 const jwtGenerator = require('./jwtGenerator');
 const validInfo = require('./Middleware/validinfo');
 const authorisation = require('./Middleware/authorisation');
+const nodemailer = require("nodemailer");
+const bodyParser = require("body-parser");
+require("dotenv").config();
 
+app.use(bodyParser.urlencoded({extended: true}))
 app.use(cors());
 app.use(express.json());
+
+
+app.post("/send_mail", async(req,res) => {
+
+  try{
+  
+    const {text} = req.body;
+
+    const transport = nodemailer.createTransport({
+      host: process.env.MAIL_HOST,
+      port: process.env.MAIL_PORT,
+      auth: {
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASS,
+      }
+    })
+
+    await transport.sendMail({
+      from: process.env.MAIL_FROM,
+      to: "conor@test.com",
+      subjext: "test email",
+      html: `<div className="email">
+      <h2>Use the below link to create an account:</h2>
+      <p>${text}</p>
+      
+      <p>All the best Conor</p>
+      </div>`
+    })
+  }
+  catch(error)
+  {
+    console.log(error);
+  }
+
+
+});
 
 
 
@@ -129,6 +169,30 @@ app.post('/signup', validInfo, async(req, res) => {
 
     const token = jwtGenerator(db_id, db_email, db_user_type);
 
+    const transport = nodemailer.createTransport({
+      host: process.env.MAIL_HOST,
+      port: process.env.MAIL_PORT,
+      auth: {
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASS,
+      }
+    })
+
+    await transport.sendMail({
+      from: process.env.MAIL_FROM,
+      to: db_email,
+      subject: "Invitation to Create Account",
+      html: `<div className="email">
+      <h2>Use the below link to create an account:</h2>
+      <p>Click the link to create your account:</p>
+      <a href="http://localhost:3000/create-account/${token}">Click here to create your account!</a>
+      
+      <p>All the best,</p>
+      <p>Conor</p>
+      </div>`
+    })
+
+    
     return res.json({ token });
 
   } 
@@ -253,6 +317,8 @@ app.get('/user-info', authorisation, async(req,res) => {
     console.log(error);
   }
 });
+
+
 
 app.listen(3001, function() {
 
