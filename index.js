@@ -9,70 +9,99 @@ const authorisation = require('./Middleware/authorisation');
 const nodemailer = require("nodemailer");
 const bodyParser = require("body-parser");
 require("dotenv").config();
+const jwt = require('jsonwebtoken');
 
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(cors());
 app.use(express.json());
 
 
-app.get("/create-account/:token", async(req,res) => {
+app.post('/getuserteams', async(req,res) => {
+  try {
+
+    const usr_id = req.body.usr_id;
+
+    console.log(req.body);
+
+    const selectUserTeams = await pool.query(
+      "SELECT usr_teams FROM user_table where usr_id = $1;", 
+      [usr_id]
+    );
+
+    //console.log(selectUserTeams);
+    res.json(selectUserTeams);
+  } 
+  catch (error) {
+    console.log(error);
+  }
+})
+
+app.post('/register-user', async(req,res) => {
+  try {
+
+    const usr_id = req.body.usr_id;
+    const password = req.body.usr_password;
+    const teams = req.body.usr_team;
+
+    console.log(teams);
+
+    const saltRounds = 10;
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hash = await bcrypt.hash(password, salt);
+
+
+    const registerUser = await pool.query(
+      'UPDATE user_table SET usr_password = $2, usr_teams = $3 where usr_id = $1;', 
+      [usr_id, hash, teams,]
+    );
+    
+    
+    res.json(registerUser);
+
+    
+  } 
+  catch (error) {
+    console.log(error.message);
+  }
+})
+
+app.get('/get-teams', async(req,res) => {
+  try {
+
+    const select = await pool.query(
+      "SELECT t_name FROM team;", 
+    );
+
+    res.json(select);
+  } 
+  catch (error) {
+    console.log(error);
+  }
+})
+
+
+app.get("/signup/:token", async(req,res) => {
+
+
   const {token} = req.params;
-
-  console.log("Req params");
-  console.log(req.params);
-
 
   jwt.verify(token, process.env.jwtSecret, (error, decoded) =>{
 
     if(error){
       console.log("Error");
-      console.log(error);
+      res.json(error);
+      
     }
     else{
-      res.send("Correct Email");
+      res.json(decoded.user);
     }
 
-  }) 
+  })
+
+  
 
 
 })
-
-
-app.post("/send_mail", async(req,res) => {
-
-  try{
-  
-    const {text} = req.body;
-
-    const transport = nodemailer.createTransport({
-      host: process.env.MAIL_HOST,
-      port: process.env.MAIL_PORT,
-      auth: {
-        user: process.env.MAIL_USER,
-        pass: process.env.MAIL_PASS,
-      }
-    })
-
-    await transport.sendMail({
-      from: process.env.MAIL_FROM,
-      to: "conor@test.com",
-      subjext: "test email",
-      html: `<div className="email">
-      <h2>Use the below link to create an account:</h2>
-      <p>${text}</p>
-      
-      <p>All the best Conor</p>
-      </div>`
-    })
-  }
-  catch(error)
-  {
-    console.log(error);
-  }
-
-
-});
-
 
 
 app.post('/addcourt', authorisation, async(req, res) => {
@@ -169,7 +198,7 @@ app.post('/addgym', async(req, res) => {
 
 })
 
-app.post('/signup', validInfo, async(req, res) => {
+app.post('/createaccount', validInfo, async(req, res) => {
   
   try {
 
@@ -204,14 +233,14 @@ app.post('/signup', validInfo, async(req, res) => {
     await transport.sendMail({
       from: process.env.MAIL_FROM,
       to: db_email,
-      subject: "Invitation to Create Account",
+      subject: "ManageMate - Create Account",
       html: `<div className="email">
-      <h2>Use the below link to create an account:</h2>
+      <h2>You have been invited to create an account with ManageMate!</h2>
       <p>Click the link to create your account:</p>
-      <a href="http://localhost:3000/create-account/${token}">Click here to create your account!</a>
+      <a href="http://localhost:3000/signup/${token}">Click here to create your account!</a>
       
       <p>All the best,</p>
-      <p>Conor</p>
+      <p>ManageMate</p>
       </div>`
     })
 

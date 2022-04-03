@@ -26,66 +26,70 @@ import ListAltIcon from '@mui/icons-material/ListAlt';
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { makeStyles } from "@material-ui/core/styles";
 import '../CSS/Sidebar.css';
+import {Link} from 'react-router-dom';
 
-const ListButton = styled(ListItemButton)({
-  color: 'black',
-  paddingRight: 10,
-  borderRadius: '20px',
-  marginLeft: 5,
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  '&:hover': {
-    backgroundColor: "white",
+
+
+function SearchAppBar() {
+
+  const ListButton = styled(ListItemButton)({
     color: 'black',
- },
-
+    paddingRight: 10,
+    borderRadius: '20px',
+    marginLeft: 5,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    '&:hover': {
+      backgroundColor: "white",
+      color: 'black',
+   },
   
-});
-
-const Search = styled('div')(({ theme }) => ({
-  position: 'relative',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  '&:hover': {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(1),
-    width: 'auto',
-  },
-}));
-
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
+    
+  });
+  
+  const Search = styled('div')(({ theme }) => ({
+    position: 'relative',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: alpha(theme.palette.common.white, 0.15),
+    '&:hover': {
+      backgroundColor: alpha(theme.palette.common.white, 0.25),
+    },
+    marginLeft: 0,
     width: '100%',
     [theme.breakpoints.up('sm')]: {
-      width: '12ch',
-      '&:focus': {
-        width: '20ch',
+      marginLeft: theme.spacing(1),
+      width: 'auto',
+    },
+  }));
+  
+  const SearchIconWrapper = styled('div')(({ theme }) => ({
+    padding: theme.spacing(0, 2),
+    height: '100%',
+    position: 'absolute',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }));
+  
+  const StyledInputBase = styled(InputBase)(({ theme }) => ({
+    color: 'inherit',
+    '& .MuiInputBase-input': {
+      padding: theme.spacing(1, 1, 1, 0),
+      // vertical padding + font size from searchIcon
+      paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+      transition: theme.transitions.create('width'),
+      width: '100%',
+      [theme.breakpoints.up('sm')]: {
+        width: '12ch',
+        '&:focus': {
+          width: '20ch',
+        },
       },
     },
-  },
-}));
+  }));
 
-export default function SearchAppBar() {
 
   const [state, setState] = React.useState({
     left: false,
@@ -109,21 +113,25 @@ export default function SearchAppBar() {
 
       <List >
 
-        <ListButton className='test'>
-          <ListItemIcon sx={{'ListItemButton:hover': {color: 'black',}}}>
-            <HomeIcon></HomeIcon>
-          </ListItemIcon>
-          <ListItemText primary="Home" />
-        </ListButton>
+        <Link to="/">
+          <ListButton className='test'>
+            <ListItemIcon sx={{'ListItemButton:hover': {color: 'black',}}}>
+              <HomeIcon></HomeIcon>
+            </ListItemIcon>
+            <ListItemText primary="Home" />
+          </ListButton>
+        </Link>
 
-        <ListButton>
-          <ListItemIcon sx={{color: 'white',}}>
-          <PersonIcon></PersonIcon>
-          </ListItemIcon>
-          <ListItemText primary="Profile" />
-        </ListButton>
+        <Link to="/schedule">
+          <ListButton >
+            <ListItemIcon sx={{color: 'white',}}>
+            <PersonIcon></PersonIcon>
+            </ListItemIcon>
+            <ListItemText primary="Profile" />
+          </ListButton>
+        </Link>
 
-        <ListButton>
+        <ListButton >
           <ListItemIcon sx={{color: 'white',}}>
             <EventNoteIcon></EventNoteIcon>
           </ListItemIcon>
@@ -205,3 +213,5 @@ export default function SearchAppBar() {
     </Box>
   );
 }
+
+export default SearchAppBar;

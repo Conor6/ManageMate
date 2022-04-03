@@ -11,14 +11,12 @@ import { colors, formControlLabelClasses, } from "@mui/material";
 
 function Schedule(props) {
 
-  console.log("Props");
-  console.log(props);
-
   const [appointments, setAppointments] = useState([]);
   const [data, setData] = useState(appointments);
   const [currentViewName, setCurrentViewName] = useState("Week");
   const [gyms, setGyms] = useState();
   const [userData, setUserData] = useState();
+  const [teams, setTeams] = useState();
 
   const ages = [{id: 1, text:"Academy"}, {id: 2, text:"U11"},{id: 3, text:"U12"},{id: 4, text:"U13"},{id: 5, text:"U14"},{id: 6, text:"U15"},
     {id: 7, text:"U16"},{id: 8, text:"U17"},{id: 9, text:"U18"},{id: 10, text:"U19"},{id: 11, text:"U20"},{id: 12, text:"Division 1"},
@@ -104,8 +102,7 @@ function Schedule(props) {
 
       </AppointmentForm.BasicLayout>
 
-      
-
+    
     );
   };
 
@@ -125,7 +122,31 @@ function Schedule(props) {
     const jsonData = await res.json();
     setUserData(jsonData);
 
+
   };
+
+  const getUserTeams = async () => {
+
+    const info = {
+      usr_id: userData.usr_id,
+    }
+
+    const body = info;
+
+    const res = await fetch("http://localhost:3001/getuserteams",{
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(body)
+    });
+
+    const jsonData = await res.json();
+    let data = jsonData.rows;
+    setTeams(data[0].usr_teams);
+
+
+    console.log("Executed...")
+
+  }
 
   const getAppointments =  async () => {
         
@@ -167,8 +188,17 @@ function Schedule(props) {
     getGyms();
     getUserData();
 
-
   }, []);
+
+  useEffect(() => {
+    console.log(userData);
+    if(userData != undefined){
+      
+      getUserTeams()
+    }
+
+  }, [userData]);
+
 
   const commitChanges = ({added, changed, deleted}) => {
 
@@ -247,8 +277,6 @@ function Schedule(props) {
         let changedApp = data.find(appointment => (changed[appointment.id]));
         let changedId = changedApp.id;
 
-        
-
         if(changed[changedId].activity && changed[changedId].gym != undefined){
 
           //Set activity to text version
@@ -314,12 +342,7 @@ function Schedule(props) {
           <EditingState onCommitChanges={commitChanges}/>
           <DayView startDayHour={9} endDayHour={23} />
           <WeekView startDayHour={17} endDayHour={23} />
-          <WeekView
-            name="Pres"
-            displayName="Presentation"
-            startDayHour={9}
-            endDayHour={23}
-          />
+
           <MonthView/>
           <Toolbar />
           <ViewSwitcher/>

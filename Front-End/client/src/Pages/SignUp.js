@@ -1,117 +1,148 @@
-import { Form, } from "react-bootstrap";
-import Button from "react-bootstrap/Button";
-import { useRef, useState } from "react";
-import {useNavigate } from "react-router-dom";
-import Dropdown from "react-bootstrap/Dropdown";
+import React from 'react'
+import { useParams } from "react-router-dom";
+import {useState, useEffect, useRef} from 'react';
+import { Form, Button } from "react-bootstrap";
+import DropdownMultiselect from "react-multiselect-dropdown-bootstrap";
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import ListItemText from '@mui/material/ListItemText';
+import Select from '@mui/material/Select';
+import Checkbox from '@mui/material/Checkbox';
+import '../CSS/SignUp.css'
+import { useNavigate } from "react-router-dom";
 
-function SignUp({setAuth}) {
+function SignUp() {
 
-  let navigate = useNavigate();
-
-    const usr_email = useRef(null);
+    const [user, setUser] = useState({});
+    const [teams, setTeams] = useState([]);
+    let params = useParams();
     const usr_password = useRef(null);
-    const usr_type = useRef(null);
+    const usr_team = useRef(null);
+    let navigate = useNavigate();
 
-    const [value, setValue] = useState();
-    
-    
-    const options = [{id: 1, name: "Manager"},{id: 2, name: "Coach"}, {id: 3, name: "Comittee Member"}];
+    const [teamName, setTeamName] = useState([])
 
-    const signUpUser =  async () => {
+    const handleChange = (event) => {
+      const {
+        target: { value },
+      } = event;
+      setTeamName(
+        // On autofill we get a stringified value.
+        typeof value === 'string' ? value.split(',') : value,
+      );
+      
+    };
+
+    const getCreateAccount =  async () => {
+        
+      const res = await fetch(`http://localhost:3001/signup/${params.token}`,{
+          method: "GET",
+      });
+
+      const jsonData = await res.json();
+
+      if(jsonData.message === "jwt expired"){
+        console.log("JWT expired")
+      }
+      else{
+        console.log("JWT not expired");
+        const userData = jsonData;
+        setUser(userData)
+      }
+      
+    };
+
+    const updateUserData = async () => {
 
       const data = {
-      
-        usr_email: usr_email.current.value,
+        usr_id: user.usr_id,
         usr_password: usr_password.current.value,
-        usr_type : usr_type.current.value
-    
+        usr_team : teamName,
       }
 
-      try{
+      const body = data;
 
-        const body = data;
+      const response = await fetch(`http://localhost:3001/register-user`, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(body),
+      });
+      
+      if(response.status === 200){
+        navigate(`/`);
+      }
 
-        const response = await fetch("http://localhost:3001/signup", {
+    }
 
-          method: "POST",
+    const getTeams = async () => {
+
+      const res = await fetch(`http://localhost:3001/get-teams`,{
+          method: "GET",
           headers: {"Content-Type": "application/json"},
-          body: JSON.stringify(body)
+      });
 
-        });
-        
-        //console.log(response);
+      const jsonData = await res.json();
+      const teamsData = jsonData.rows;
 
-        /*if(response.status === 200){
-          navigate("/");
-        }
-        */
-       
-        const parseRes = await response.json();
+      let teams_array = [];
+      teamsData.forEach(element => teams_array.push(element.t_name[0]));
+      setTeams(teams_array);
+    }
 
-        //console.log(parseRes);
+    useEffect(() => {
+      getCreateAccount();
+      getTeams();
+    }, []);
 
-        localStorage.setItem("token", parseRes.token);
-        setAuth(true);
-
-        
-      }
-      catch(err){
-        
-        console.log(err.message)
-        
-      }
-    
-  }
   return (
     <div className="text-center col-md-6 mx-auto" id="loginDiv">
 
-      <h2 className="loginTitle" id="login-title">Sign Up</h2>
+    <h2 className="loginTitle" id="login-title">Sign Up</h2>
 
-      <Form>
-        <Form.Group className="mb-3" controlId="userEmail">
+    <Form>
+      <Form.Group className="mb-3" id="usrPassword" controlId="Password">
 
-          <Form.Label htmlFor="inputText5">Email</Form.Label>
-          <Form.Control className="text-center col-md-6 mx-auto" type="email" placeholder="Email" ref = {usr_email}/>
-          
-        </Form.Group>
+        <Form.Label >Create Password:</Form.Label>
+        <Form.Control className="text-center col-md-6 mx-auto" type="password" ref = {usr_password}/>
 
-        <Form.Group className="mb-3" id="usrPassword" controlId="Password">
+      </Form.Group>
 
-          <Form.Label htmlFor="inputPassword5">Password</Form.Label>
-          <Form.Control className="text-center col-md-6 mx-auto" type="password" placeholder="Password" ref = {usr_password}/>
+      <Form.Group className="mb-3" id="usrSelect" controlId="Select">
 
-        </Form.Group>
+        <Form.Label >Select the Team(s) you are the Manager/Coach of:</Form.Label>
 
-        <Form.Group className="mb-3" id="usrSelect" controlId="Select">
-
-          <Form.Label htmlFor="inputText5">User Type</Form.Label>
-
-          <Form.Select 
-            className="text-center col-md-6 mx-auto" 
-            type="text" placeholder="Select User Type" 
-            ref = {usr_type}
-            value = {value}
-            onChange={(e) => setValue(e.target.value)}
-          >
-
-          {options.map((o) => {
-
-            const { name} = o;
-              return <option value={name}>{name}</option>;
-          })}
-
-          </Form.Select>
-
-         
-
-        </Form.Group>
+        <div className='col-12'>
+        <Select
+          className='team-select'
+          labelId="demo-multiple-checkbox-label"
+          id="demo-multiple-checkbox"
+          multiple
+          value={teamName}
+          onChange={handleChange}
+          input={<OutlinedInput label="Tag" />}
+          renderValue={(selected) => selected.join(', ')}
+          sx={{maxWidth: 350, width: 350}}
+        >
+          {teams.map((team) => (
+            <MenuItem key={team} value={team}>
+              <Checkbox checked={teamName.indexOf(team) > -1} />
+              <ListItemText primary={team} />
+            </MenuItem>
+          ))}
+        </Select>
+        </div>
+        
+      </Form.Group>
 
 
-        <Button id="loginBtn" variant="primary" onClick={()=> signUpUser()}>Sign Up</Button>
+      <Button id="loginBtn" variant="primary" onClick={updateUserData}>Sign Up</Button>
 
-      </Form>
-    </div>
-  );
+    </Form>
+  </div>
+    
+  )
 }
 
 export default SignUp;

@@ -12,9 +12,6 @@ import GymList from './Pages/GymList';
 import GymProfile from './Pages/GymProfile';
 import Dashboard from './Pages/Dashboard';
 import Schedule from './Pages/Schedule';
-import S2 from './Pages/S2';
-import S3 from './Pages/S3';
-import Sidebar from './Components/SideBar';
 import TeamProfile from './Pages/TeamProfile';
 import  AppBar  from './Components/AppBar';
 import Email from './Pages/Email';
@@ -59,18 +56,15 @@ function App() {
     <>
       <StyledEngineProvider injectFirst>
 
-      
         <Router>
 
-          <AppBar>
-            
-          </AppBar>        
+          <AppBar></AppBar>        
 
           <Routes>
 
             <Route path="/" element={ !isAuthenticated ? ( <Login setAuth={setAuth}/> ) : (<Navigate to="/gymlist"/>)} />
 
-            <Route path="/signup" element={ !isAuthenticated ? ( <SignUp setAuth={setAuth}/> ) : (<Navigate to="/"/>)} />
+            <Route path="/createaccount" element={ !isAuthenticated ? ( <CreateAccount setAuth={setAuth}/> ) : (<Navigate to="/"/>)} />
 
             <Route path="/addcourt/:gym_id" element={ isAuthenticated ? ( <AddCourt setAuth={setAuth}/> ) : (<Navigate to="/"/>)} />
 
@@ -82,16 +76,13 @@ function App() {
 
             <Route path="/dashboard" element={ isAuthenticated ? ( <Dashboard setAuth={setAuth}/> ) : (<Navigate to="/"/>)} />
 
-
-
             <Route path="/schedule" element={<Schedule /> } />
-            <Route path="/S2" element={<S2/> } />
-            <Route path="/S3" element={<S3/> } />
-            <Route path="/sidebar" element={<Sidebar/> } />
+
             <Route path="/teamprofile" element={<TeamProfile/> } />
-            <Route path="/appbar" element={<AppBar/> } />
+
             <Route path="/email" element={<Email/> } />
-            <Route path="/create-account/:token" element={<CreateAccount/> } />
+
+            <Route path="/signup/:token" element={<SignUp /> } />
 
 
 
