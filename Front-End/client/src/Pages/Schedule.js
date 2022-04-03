@@ -62,6 +62,10 @@ function Schedule(props) {
     const onGymChange = (nextValue) => {
       onFieldChange({ gym: nextValue });
     };
+
+    const onTeamChange = (nextValue) => {
+      onFieldChange({ team: nextValue });
+    };
   
     if(appointmentData.activity === undefined){
       appointmentData.activity = 1;
@@ -69,6 +73,10 @@ function Schedule(props) {
 
     if(appointmentData.gym === undefined){
       appointmentData.gym = 1;
+    }
+
+    if(appointmentData.team === undefined){
+      appointmentData.team = 1;
     }
 
     return (
@@ -100,6 +108,18 @@ function Schedule(props) {
           type="outlinedSelect"
         />
 
+        <AppointmentForm.Label
+          text="Team"
+          type="title"
+        />
+
+        <AppointmentForm.Select
+          onValueChange={onTeamChange}
+          value={appointmentData.team}
+          availableOptions={teams}
+          type="outlinedSelect"
+        />
+
       </AppointmentForm.BasicLayout>
 
     
@@ -126,13 +146,11 @@ function Schedule(props) {
   };
 
   const getUserTeams = async () => {
-
     const info = {
       usr_id: userData.usr_id,
     }
 
     const body = info;
-
     const res = await fetch("http://localhost:3001/getuserteams",{
       method: "POST",
       headers: {"Content-Type": "application/json"},
@@ -141,11 +159,19 @@ function Schedule(props) {
 
     const jsonData = await res.json();
     let data = jsonData.rows;
-    setTeams(data[0].usr_teams);
 
 
-    console.log("Executed...")
+    data = data[0].usr_teams;
+    let teamsArray = []
+    let i = 1;
 
+    //Modify the data so that it is compatible with the Select menus
+    Object.keys(data).forEach(key => {
+      
+      teamsArray.push({id: i, text: data[key] })
+      i++;
+    })
+    setTeams(teamsArray);
   }
 
   const getAppointments =  async () => {
@@ -158,7 +184,6 @@ function Schedule(props) {
     const jsonData = await res.json();
     let apps = jsonData.rows;
     setData(apps);
-
   };
 
   const getGyms =  async () => {
@@ -214,15 +239,26 @@ function Schedule(props) {
           added.gym = 1;
         }
 
-        if(added.activity && added.gym != undefined){
+        if(added.team === undefined){
+          added.team = 1;
+        }
+
+        console.log("added activity+gym")
+        console.log(added.gym);
+        console.log(added.activity);
+        console.log(added.team);
+
+        if(added.activity && added.gym && added.team != undefined){
           added.activity = activities[added.activity-1].text;
           added.gym = gyms[added.gym-1].text;
+          added.team = teams[added.team-1].text;
+          
         }
 
         const startingAddedId = data.length > 0 ? data[data.length -1].id +1 : 0;
         let booking = [...data, { id: startingAddedId, ...added }]
 
-        booking[startingAddedId].title = booking[startingAddedId].activity + "-" + booking[startingAddedId].gym;
+        booking[startingAddedId].title = booking[startingAddedId].gym + ": " + booking[startingAddedId].team + " - " + booking[startingAddedId].activity; 
 
         const addBooking = async (booking, startingAddedId) => {
           
@@ -235,6 +271,7 @@ function Schedule(props) {
             usr_id: userData.usr_id,
             activity: booking[startingAddedId].activity,
             gym: booking[startingAddedId].gym,
+            team: booking[startingAddedId].team
             
           };
 
@@ -263,6 +300,7 @@ function Schedule(props) {
             usr_id: userData.usr_id,
             activity: apps.activity,
             gym: apps.gym,
+            team: apps.team,
             
           };
 
@@ -277,7 +315,7 @@ function Schedule(props) {
         let changedApp = data.find(appointment => (changed[appointment.id]));
         let changedId = changedApp.id;
 
-        if(changed[changedId].activity && changed[changedId].gym != undefined){
+        if(changed[changedId].activity && changed[changedId].gym && changed[changedId].team != undefined){
 
           //Set activity to text version
           if(typeof changed[changedId].activity === "number"){
@@ -291,9 +329,13 @@ function Schedule(props) {
             changed[changedId].gym = gyms[changed[changedId].gym-1].text;
           }
 
-          //Set title
-          changed[changedId].title = changed[changedId].activity + " - " + changed[changedId].gym;
+          if(typeof changed[changedId].team === "number"){
 
+            changed[changedId].team = teams[changed[changedId].team-1].text;
+          }
+
+          //Set title
+          changed[changedId].title = changed[changedId].gym + ": " + changed[changedId].team + " - " + changed[changedId].activity;
         }
 
         let apps = data.map(appointment => (changed[appointment.id] ? { ...appointment, ...changed[appointment.id] } : appointment));

@@ -271,13 +271,13 @@ app.get('/gymlist', authorisation, async(req, res) => {
 
 app.post('/appointment', async(req, res) =>{
 
-  const { id, title, start_date, end_date, rRule, usr_id, activity, gym}  = req.body;
+  const { id, title, start_date, end_date, rRule, usr_id, activity, gym, team}  = req.body;
 
   try {
 
     const insertAppointment = await pool.query(
-      'INSERT INTO booking_table (id, title, "startDate", "endDate", "rRule", usr_id, activity, gym) VALUES($1, $2, $3, $4, $5, $6, $7, $8)', 
-      [id, title, start_date, end_date,rRule, usr_id, activity, gym]
+      'INSERT INTO booking_table (id, title, "startDate", "endDate", "rRule", usr_id, activity, gym, team) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)', 
+      [id, title, start_date, end_date,rRule, usr_id, activity, gym, team]
     );
 
     res.json(insertAppointment);
@@ -326,13 +326,13 @@ app.post('/update-appointment', async(req,res) => {
 
   try {
 
-    const {id, title, startDate, endDate, rRule, usr_id, activity, gym} = req.body;
+    const {id, title, startDate, endDate, rRule, usr_id, activity, gym, team} = req.body;
 
     console.log(req.body)
 
     const updateAppointment = await pool.query(
-      'UPDATE booking_table SET title = $2, "startDate" = $3, "endDate" = $4, "rRule" = $5, usr_id = $6, activity = $7, gym = $8 WHERE id = $1', 
-      [id, title, startDate, endDate, rRule, usr_id, activity, gym]
+      'UPDATE booking_table SET title = $2, "startDate" = $3, "endDate" = $4, "rRule" = $5, usr_id = $6, activity = $7, gym = $8, team = $9 WHERE id = $1', 
+      [id, title, startDate, endDate, rRule, usr_id, activity, gym, team]
     );
     
     res.json(updateAppointment);
