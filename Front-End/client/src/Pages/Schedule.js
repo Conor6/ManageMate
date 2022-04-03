@@ -383,7 +383,7 @@ function Schedule(props) {
           />
           <EditingState onCommitChanges={commitChanges}/>
           <DayView startDayHour={9} endDayHour={23} />
-          <WeekView startDayHour={17} endDayHour={23} />
+          <WeekView startDayHour={9} endDayHour={23} />
 
           <MonthView/>
           <Toolbar />
