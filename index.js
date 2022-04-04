@@ -54,11 +54,7 @@ app.post('/register-user', async(req,res) => {
       'UPDATE user_table SET usr_password = $2, usr_teams = $3 where usr_id = $1;', 
       [usr_id, hash, teams,]
     );
-    
-    
     res.json(registerUser);
-
-    
   } 
   catch (error) {
     console.log(error.message);
@@ -78,7 +74,6 @@ app.get('/get-teams', async(req,res) => {
     console.log(error);
   }
 })
-
 
 app.get("/signup/:token", async(req,res) => {
 

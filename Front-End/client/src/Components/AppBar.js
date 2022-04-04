@@ -149,7 +149,7 @@ function SearchAppBar() {
           <ListItemIcon sx={{color: 'white',}}>
             <GroupsIcon></GroupsIcon>
           </ListItemIcon>
-          <ListItemText primary="My Team" />
+          <ListItemText primary="My Teams" />
         </ListButton>
 
         <ListButton>

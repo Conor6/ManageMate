@@ -3,33 +3,25 @@ import {useNavigate, useParams } from "react-router-dom";
 
 function GymList({setAuth}) {
 
-  console.log(setAuth);
-
   let navigate = useNavigate();
-
   const [gym_data, setGymData] = useState([]);
+  
 
   const getGyms =  async () => {
         
-    
     const res = await fetch("http://localhost:3001/gymlist",{
-
       method: "GET",
       headers: {token: localStorage.token}
 
     });
+    
     const jsonData = await res.json();
     const data = jsonData.rows;
-  
-  
-    setGymData(data);
-
-    console.log("data");
+    console.log("Data");
     console.log(data);
-  
+    setGymData(data);
   
   };
-
 
   useEffect(() => {
 
@@ -44,7 +36,6 @@ function GymList({setAuth}) {
     
   }
   
-
   return (
     
     <div className=" col-md-6 mx-auto" id="gymProfileDiv">
@@ -60,7 +51,7 @@ function GymList({setAuth}) {
           <tbody>
             {gym_data.map(gym_data => (
               <tr key={gym_data.gym_id} data-item={gym_data}>
-                <td data-title="Gym-Name" key={gym_data.id} onClick={(e) => getGymData(gym_data)}>{gym_data.gym_name}</td>
+                <td data-title="Gym-Name" key={gym_data.id} onClick={() => getGymData(gym_data)}>{gym_data.gym_name}</td>
                 <td>Edit</td>
                 <td>Delete</td>
               </tr>

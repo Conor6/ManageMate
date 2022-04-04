@@ -16,6 +16,7 @@ import TeamProfile from './Pages/TeamProfile';
 import  AppBar  from './Components/AppBar';
 import Email from './Pages/Email';
 import CreateAccount from './Pages/CreateAccount';
+import TeamList from './Pages/TeamList';
 
 
 function App() {
@@ -78,11 +79,13 @@ function App() {
 
             <Route path="/schedule" element={<Schedule /> } />
 
-            <Route path="/teamprofile" element={<TeamProfile/> } />
+            <Route path="/teamprofile/:team" element={<TeamProfile/> } />
 
             <Route path="/email" element={<Email/> } />
 
             <Route path="/signup/:token" element={<SignUp /> } />
+
+            <Route path="/teamlist" element={<TeamList /> } />
 
 
 

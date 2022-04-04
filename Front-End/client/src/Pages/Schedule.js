@@ -208,20 +208,16 @@ function Schedule(props) {
   };
 
   useEffect(() => {
-
     getAppointments();
     getGyms();
     getUserData();
-
   }, []);
 
   useEffect(() => {
-    console.log(userData);
+
     if(userData != undefined){
-      
       getUserTeams()
     }
-
   }, [userData]);
 
 
@@ -243,10 +239,6 @@ function Schedule(props) {
           added.team = 1;
         }
 
-        console.log("added activity+gym")
-        console.log(added.gym);
-        console.log(added.activity);
-        console.log(added.team);
 
         if(added.activity && added.gym && added.team != undefined){
           added.activity = activities[added.activity-1].text;
