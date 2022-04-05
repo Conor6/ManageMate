@@ -1,6 +1,5 @@
 import { useEffect, useState, useCallback} from "react";
 import {useNavigate, useParams } from "react-router-dom";
-
 import { Container, Row } from "react-bootstrap";
 import Paper from '@mui/material/Paper';
 import { ViewState, EditingState, IntegratedEditing } from '@devexpress/dx-react-scheduler';
@@ -11,8 +10,9 @@ import { colors, formControlLabelClasses, } from "@mui/material";
 
 function Schedule(props) {
 
+
   const [appointments, setAppointments] = useState([]);
-  const [data, setData] = useState(appointments);
+  const [data, setData] = useState(props.appointments);
   const [currentViewName, setCurrentViewName] = useState("Week");
   const [gyms, setGyms] = useState();
   const [userData, setUserData] = useState();
@@ -142,7 +142,6 @@ function Schedule(props) {
     const jsonData = await res.json();
     setUserData(jsonData);
 
-
   };
 
   const getUserTeams = async () => {
@@ -183,6 +182,8 @@ function Schedule(props) {
 
     const jsonData = await res.json();
     let apps = jsonData.rows;
+    console.log("apps");
+    console.log(apps);
     setData(apps);
   };
 
@@ -208,7 +209,7 @@ function Schedule(props) {
   };
 
   useEffect(() => {
-    getAppointments();
+    //getAppointments();
     getGyms();
     getUserData();
   }, []);
@@ -239,20 +240,30 @@ function Schedule(props) {
           added.team = 1;
         }
 
-
         if(added.activity && added.gym && added.team != undefined){
-          added.activity = activities[added.activity-1].text;
-          added.gym = gyms[added.gym-1].text;
-          added.team = teams[added.team-1].text;
+
+          //Set activity to text version
+          if(typeof added.activity === "number"){
+            added.activity = activities[added.activity-1].text;
+          }
+          
+          //Set gym to text version
+          if(typeof added.gym === "number"){
+            added.gym = gyms[added.gym-1].text;
+          }
+          
+          if(typeof added.team === "number"){
+            added.team = teams[added.team-1].text;
+          }
           
         }
 
         const startingAddedId = data.length > 0 ? data[data.length -1].id +1 : 0;
         let booking = [...data, { id: startingAddedId, ...added }]
-
+        let length = booking.length;
         booking[startingAddedId].title = booking[startingAddedId].gym + ": " + booking[startingAddedId].team + " - " + booking[startingAddedId].activity; 
 
-        const addBooking = async (booking, startingAddedId) => {
+        const addBooking = async (booking, startingAddedId, length) => {
           
           const data = {
             id: booking[startingAddedId].id,
@@ -264,7 +275,7 @@ function Schedule(props) {
             activity: booking[startingAddedId].activity,
             gym: booking[startingAddedId].gym,
             team: booking[startingAddedId].team
-            
+
           };
 
           let body = data;
@@ -275,7 +286,7 @@ function Schedule(props) {
           });
         
         }
-        addBooking(booking, startingAddedId);
+        addBooking(booking, startingAddedId,length);
         setData(booking);
       }
 
@@ -293,6 +304,7 @@ function Schedule(props) {
             activity: apps.activity,
             gym: apps.gym,
             team: apps.team,
+            exDate: apps.exDate,
             
           };
 
@@ -342,6 +354,7 @@ function Schedule(props) {
 
       if(deleted !== undefined){
 
+
         let app = deleted;
 
         const deleteApp = async (app)=> {
@@ -367,7 +380,7 @@ function Schedule(props) {
   return (
     <Container>
       <Paper>
-        <Scheduler data={data} height={700} >
+        <Scheduler data={props.appointments} height={700} >
 
           <ViewState 
             currentViewName={currentViewName}

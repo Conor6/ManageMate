@@ -17,6 +17,7 @@ import  AppBar  from './Components/AppBar';
 import Email from './Pages/Email';
 import CreateAccount from './Pages/CreateAccount';
 import TeamList from './Pages/TeamList';
+import MyBookings from './Pages/MyBookings';
 
 
 function App() {
@@ -35,16 +36,11 @@ function App() {
         method: "GET",
         headers: {token: localStorage.token}
       });
-
       const parseRes = await response.json();
-
       parseRes === true ? setIsAuthenticated(true) : setIsAuthenticated(false);
-
     }
     catch(err){
-
       console.log(err.message);
-
     }
   }
 
@@ -53,7 +49,6 @@ function App() {
   }, [])
 
   return (
-
     <>
       <StyledEngineProvider injectFirst>
 
@@ -69,7 +64,7 @@ function App() {
 
             <Route path="/addcourt/:gym_id" element={ isAuthenticated ? ( <AddCourt setAuth={setAuth}/> ) : (<Navigate to="/"/>)} />
 
-            <Route path="/addgym" element={ isAuthenticated ? ( <AddGym setAuth={setAuth}/> ) : (<Navigate to="/"/>)} />
+            <Route path="/addgym" element={ <AddGym setAuth={setAuth}/> }/>
 
             <Route path="/gymlist" element={ isAuthenticated ? ( <GymList setAuth={setAuth}/> ) : (<Navigate to="/"/>)} />
 
@@ -86,6 +81,8 @@ function App() {
             <Route path="/signup/:token" element={<SignUp /> } />
 
             <Route path="/teamlist" element={<TeamList /> } />
+
+            <Route path="/mybookings" element={<MyBookings /> } />
 
 
 

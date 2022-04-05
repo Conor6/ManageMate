@@ -122,43 +122,52 @@ function SearchAppBar() {
           </ListButton>
         </Link>
 
-        <Link to="/schedule">
           <ListButton >
             <ListItemIcon sx={{color: 'white',}}>
             <PersonIcon></PersonIcon>
             </ListItemIcon>
             <ListItemText primary="Profile" />
           </ListButton>
+
+
+        <Link to='/schedule'>
+          <ListButton >
+            <ListItemIcon sx={{color: 'white',}}>
+              <EventNoteIcon></EventNoteIcon>
+            </ListItemIcon>
+            <ListItemText primary="Schedule" />
+          </ListButton>
         </Link>
 
-        <ListButton >
-          <ListItemIcon sx={{color: 'white',}}>
-            <EventNoteIcon></EventNoteIcon>
-          </ListItemIcon>
-          <ListItemText primary="Schedule" />
-        </ListButton>
 
-        <ListButton>
-          <ListItemIcon sx={{color: 'white',}}>
-            <EventIcon></EventIcon>
-          </ListItemIcon>
-          <ListItemText primary="My Bookings" />
-        </ListButton>
+        <Link to='/mybookings'>
+          <ListButton>
+            <ListItemIcon sx={{color: 'white',}}>
+              <EventIcon></EventIcon>
+            </ListItemIcon>
+            <ListItemText primary="My Bookings" />
+          </ListButton>
+        </Link>
 
-        <ListButton> 
-          <ListItemIcon sx={{color: 'white',}}>
-            <GroupsIcon></GroupsIcon>
-          </ListItemIcon>
-          <ListItemText primary="My Teams" />
-        </ListButton>
-
-        <ListButton>
-          <ListItemIcon sx={{color: 'white',}}>
-            <ListAltIcon />
-          </ListItemIcon>
-          <ListItemText primary="Gym List" />
-        </ListButton>
         
+        <Link to="/teamlist">
+          <ListButton> 
+            <ListItemIcon sx={{color: 'white',}}>
+              <GroupsIcon></GroupsIcon>
+            </ListItemIcon>
+            <ListItemText primary="My Teams" />
+          </ListButton>
+        </Link>
+
+        <Link to="/gymlist">
+          <ListButton>
+            <ListItemIcon sx={{color: 'white',}}>
+              <ListAltIcon />
+            </ListItemIcon>
+            <ListItemText primary="Gym List" />
+          </ListButton>
+        </Link>
+
       </List>
 
     </Box>

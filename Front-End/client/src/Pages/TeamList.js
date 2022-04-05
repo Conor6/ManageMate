@@ -23,9 +23,6 @@ function TeamList() {
 
     const getUserTeams = async () => {
 
-        console.log("UserID");
-        console.log(userData.usr_id);
-
         const info = {
           usr_id: userData.usr_id,
         }
@@ -40,17 +37,21 @@ function TeamList() {
         const jsonData = await res.json();
         let data = jsonData.rows;
    
+        console.log(jsonData)
+
         data = data[0].usr_teams;
         let teamsArray = []
         let i = 1;
-    
+
+        console.log(jsonData.rows);
+        
+
         //Modify the data so that it is compatible with the Select menus
         Object.keys(data).forEach(key => {
           
           teamsArray.push({id: i, team: data[key] })
           i++;
         })
-
         
         setUserTeams(teamsArray);
         setLoading(false);
@@ -59,9 +60,9 @@ function TeamList() {
     const navButton = (userData) => {
 
   
-        navigate(`/teamprofile/${userData.team}`);
+      navigate(`/teamprofile/${userData.team}`);
         
-      }
+    }
 
     useEffect(() => {
         getUserData();
@@ -69,13 +70,9 @@ function TeamList() {
 
     useEffect(() => {
 
-        console.log("useEffect userData");
-        console.log(userData);
-
-        if(userData != undefined){
-            getUserTeams()
-        }
-        console.log(userTeams);
+      if(userData != undefined){
+        getUserTeams()
+      }
 
     }, [userData]);
 

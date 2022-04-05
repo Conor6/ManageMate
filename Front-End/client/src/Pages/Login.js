@@ -22,7 +22,6 @@ function Login({setAuth}) {
     try{
 
       const body = data;
-
       const response = await fetch("http://localhost:3001/login", {
 
         method: "POST",

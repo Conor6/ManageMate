@@ -1,7 +1,17 @@
-.team-header{
+.team-profile{
+
     text-align: center;
 }
 
-.scheduler{
-    border: 2px solid black;
+.team-container{
+
+    max-width: 100%;
+}
+
+.details{
+
+}
+
+.details-header{
+    margin-top: 5%;
 }

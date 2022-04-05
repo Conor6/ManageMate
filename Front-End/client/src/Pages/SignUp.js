@@ -87,8 +87,10 @@ function SignUp() {
       const teamsData = jsonData.rows;
 
       let teams_array = [];
-      teamsData.forEach(element => teams_array.push(element.t_name[0]));
+      teamsData.forEach(element => teams_array.push(element.t_name));
       setTeams(teams_array);
+
+      
     }
 
     useEffect(() => {

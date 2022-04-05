@@ -16,6 +16,60 @@ app.use(cors());
 app.use(express.json());
 
 
+app.post('/get-user-apps', async(req,res) => {
+  try {
+
+    const {usr_id} = req.body;;
+
+    const getTeamApps = await pool.query(
+      "SELECT * FROM booking_table where usr_id = $1;", 
+      [usr_id]
+    );
+
+    res.json(getTeamApps);
+  } 
+  catch (error) {
+    console.log(error.message);
+  }
+})
+
+app.post('/get-team-apps', async(req,res) => {
+  try {
+
+    const {team} = req.body;;
+
+    const getTeamApps = await pool.query(
+      "SELECT * FROM booking_table where team = $1;", 
+      [team]
+    );
+
+    res.json(getTeamApps);
+  } 
+  catch (error) {
+    console.log(error.message);
+  }
+})
+
+
+app.post('/get-team', async(req,res) => {
+  try {
+
+    const {t_name} = req.body;
+
+    console.log(t_name);
+
+    const selectUserTeams = await pool.query(
+      "SELECT * FROM team where t_name = $1;", 
+      [t_name]
+    );
+
+    res.json(selectUserTeams);
+  } 
+  catch (error) {
+    console.log(error.message);
+  }
+})
+
 app.post('/getuserteams', async(req,res) => {
   try {
 
@@ -92,9 +146,6 @@ app.get("/signup/:token", async(req,res) => {
     }
 
   })
-
-  
-
 
 })
 
@@ -303,6 +354,8 @@ app.post('/delete-appointment', async(req,res) => {
 
   try {
 
+    console.log("deleted");
+
     const {id} = req.body;
 
     const deleteAppointment = await pool.query(
@@ -321,13 +374,13 @@ app.post('/update-appointment', async(req,res) => {
 
   try {
 
-    const {id, title, startDate, endDate, rRule, usr_id, activity, gym, team} = req.body;
+    const {id, title, startDate, endDate, rRule, usr_id, activity, gym, team, exDate} = req.body;
 
-    console.log(req.body)
+    console.log(exDate);
 
     const updateAppointment = await pool.query(
-      'UPDATE booking_table SET title = $2, "startDate" = $3, "endDate" = $4, "rRule" = $5, usr_id = $6, activity = $7, gym = $8, team = $9 WHERE id = $1', 
-      [id, title, startDate, endDate, rRule, usr_id, activity, gym, team]
+      'UPDATE booking_table SET title = $2, "startDate" = $3, "endDate" = $4, "rRule" = $5, usr_id = $6, activity = $7, gym = $8, team = $9, "exDate" = $10 WHERE id = $1', 
+      [id, title, startDate, endDate, rRule, usr_id, activity, gym, team, exDate]
     );
     
     res.json(updateAppointment);
@@ -354,12 +407,9 @@ app.get('/getgyms', async(req,res) => {
 });
 
 app.get('/user-info', authorisation, async(req,res) => {
-
   try {
-
     res.json(req.user);
 
-    
   } catch (error) {
     console.log(error);
   }
