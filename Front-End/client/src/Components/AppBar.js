@@ -111,60 +111,60 @@ function SearchAppBar() {
       onKeyDown={toggleDrawer(anchor, false)}
     >
 
-      <List >
+      <List>
 
-        <Link to="/">
-          <ListButton className='test'>
-            <ListItemIcon sx={{'ListItemButton:hover': {color: 'black',}}}>
-              <HomeIcon></HomeIcon>
+        <Link to="/" className='ListButton'>
+          <ListButton className='ListButton'>
+            <ListItemIcon className='icon'>
+              <HomeIcon className='icon'></HomeIcon>
             </ListItemIcon>
-            <ListItemText primary="Home" />
+            <ListItemText disableTypography primary="Home" className='side-text'/>
           </ListButton>
         </Link>
 
-          <ListButton >
-            <ListItemIcon sx={{color: 'white',}}>
-            <PersonIcon></PersonIcon>
+          <ListButton className='ListButton'>
+            <ListItemIcon className='icon'>
+            <PersonIcon className='icon'></PersonIcon>
             </ListItemIcon>
-            <ListItemText primary="Profile" />
+            <ListItemText disableTypography primary="Profile" className='side-text'/>
           </ListButton>
 
 
-        <Link to='/schedule'>
-          <ListButton >
-            <ListItemIcon sx={{color: 'white',}}>
-              <EventNoteIcon></EventNoteIcon>
+        <Link to='/schedule' className='ListButton'>
+          <ListButton className='ListButton'>
+            <ListItemIcon className='icon'>
+              <EventNoteIcon className='icon'></EventNoteIcon>
             </ListItemIcon>
-            <ListItemText primary="Schedule" />
+            <ListItemText disableTypography primary="Schedule" className='side-text'/>
           </ListButton>
         </Link>
 
 
-        <Link to='/mybookings'>
-          <ListButton>
-            <ListItemIcon sx={{color: 'white',}}>
-              <EventIcon></EventIcon>
+        <Link to='/mybookings' className='ListButton'>
+          <ListButton className='ListButton'>
+            <ListItemIcon className='icon'>
+              <EventIcon className='icon'></EventIcon>
             </ListItemIcon>
-            <ListItemText primary="My Bookings" />
+            <ListItemText disableTypography primary="My Bookings" className='side-text'/>
           </ListButton>
         </Link>
 
         
-        <Link to="/teamlist">
-          <ListButton> 
-            <ListItemIcon sx={{color: 'white',}}>
-              <GroupsIcon></GroupsIcon>
+        <Link to="/teamlist" className='ListButton'>
+          <ListButton className='ListButton'> 
+            <ListItemIcon className='icon'>
+              <GroupsIcon className='icon'></GroupsIcon>
             </ListItemIcon>
-            <ListItemText primary="My Teams" />
+            <ListItemText disableTypography primary="My Teams" className='side-text'/>
           </ListButton>
         </Link>
 
-        <Link to="/gymlist">
-          <ListButton>
-            <ListItemIcon sx={{color: 'white',}}>
-              <ListAltIcon />
+        <Link to="/gymlist" className='ListButton'>
+          <ListButton className='ListButton'>
+            <ListItemIcon className='icon'>
+              <ListAltIcon className='icon'/>
             </ListItemIcon>
-            <ListItemText primary="Gym List" />
+            <ListItemText disableTypography primary="Gym List" className='side-text'/>
           </ListButton>
         </Link>
 

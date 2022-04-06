@@ -1,4 +1,27 @@
-.test.Mui-focusVisible{
+.ListButton{
   color: white;
-  width: 80%;
+  text-decoration: none;
+  size: 70px;
+  font-weight: bold;
+  font-size: 25px;
+  max-width: 95.9%;
+  padding-top: 15px;
+}
+
+.ListButton:hover{
+  text-decoration: none;
+  color: black !important;
+}
+
+.ListButton:hover .icon{
+  text-decoration: none;
+  color: black !important;
+}
+
+.icon{
+  color: white;
+  text-align: center;
+  size: 25px;
+  font-size: 38px;
+  font-weight: bold;
 }
