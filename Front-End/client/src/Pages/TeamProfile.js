@@ -4,6 +4,8 @@ import '../CSS/TeamProfile.css'
 import Schedule from './Schedule';
 import {useState, useEffect} from 'react';
 import { useParams } from "react-router-dom";
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 
 function TeamProfile() {
@@ -82,7 +84,9 @@ function TeamProfile() {
         </Container>
         ):(
 
-          <h1>Loading...</h1>
+          <Box sx={{ display: 'flex', justifyContent: 'center', size: 25}}>
+            <CircularProgress />
+          </Box>
         )
       }
         

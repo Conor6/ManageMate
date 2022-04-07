@@ -1,10 +1,16 @@
 import { useEffect, useState} from "react";
 import {useNavigate, useParams } from "react-router-dom";
+import {Card, Button, Container, Row, Col} from 'react-bootstrap';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+import '../CSS/GymList.css'
+import sampleImage from './images/black.jpg';
 
 function GymList({setAuth}) {
 
   let navigate = useNavigate();
   const [gym_data, setGymData] = useState([]);
+  const [loading, setLoading] = useState(true);
   
 
   const getGyms =  async () => {
@@ -17,50 +23,48 @@ function GymList({setAuth}) {
     
     const jsonData = await res.json();
     const data = jsonData.rows;
-    console.log("Data");
-    console.log(data);
     setGymData(data);
-  
+    setLoading(false);
   };
 
   useEffect(() => {
-
     getGyms();
-
   }, []);
 
   const getGymData = (gym_data) => {
-
-  
     navigate(`/gymprofile/${gym_data.gym_name}`);
-    
   }
-  
+
   return (
     
-    <div className=" col-md-6 mx-auto" id="gymProfileDiv">
+    <Container fluid className="container">
+      <h1 className="title">Gym List</h1>
+        {!loading ? (
+          <>
+            <Row xs={1} sm={2} md={3} lg={3} xl={3} xxl={3} className="con-rows g-6">
+              {gym_data.map((gym_data) => (
+                <Col className="con-column">
+                  <Card style={{ width: '18rem' }} key={gym_data.gym_id} className="cards">
+                    <Card.Img variant="top" src={sampleImage}/>
+                    <Card.Body>
+                      <Card.Title>{gym_data.gym_name}</Card.Title>
+                      <Button variant="primary" onClick={() => getGymData(gym_data)}>Profile</Button>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              ))}
+            </Row>
+          </>
 
-      <table className="table table-bordered" variant="dark">
-          <thead>
-            <tr>
-              <th>Gym Name</th>
-              <th>Edit Gym</th>
-              <th>Delete Gym</th>
-            </tr>
-          </thead>
-          <tbody>
-            {gym_data.map(gym_data => (
-              <tr key={gym_data.gym_id} data-item={gym_data}>
-                <td data-title="Gym-Name" key={gym_data.id} onClick={() => getGymData(gym_data)}>{gym_data.gym_name}</td>
-                <td>Edit</td>
-                <td>Delete</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
 
-        
-    </div>
+        ):
+        (
+          <Box sx={{ display: 'flex', justifyContent: 'center', size: 25}}>
+            <CircularProgress />
+          </Box>
+        )
+      }
+    </Container>
   );
 }
 

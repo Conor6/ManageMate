@@ -35,7 +35,7 @@ function SearchAppBar() {
   const ListButton = styled(ListItemButton)({
     color: 'black',
     paddingRight: 10,
-    borderRadius: '20px',
+    borderRadius: '28px',
     marginLeft: 5,
     display: "flex",
     alignItems: "center",
@@ -213,7 +213,7 @@ function SearchAppBar() {
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
-              placeholder="Search…"
+              placeholder="Search teams..."
               inputProps={{ 'aria-label': 'search' }}
             />
           </Search>

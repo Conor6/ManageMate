@@ -1,7 +1,10 @@
 import React from 'react'
 import {useState, useEffect} from 'react';
 import {useNavigate, useParams } from "react-router-dom";
-import { Container, Row } from "react-bootstrap";
+import sampleImage from './images/black.jpg';
+import {Card, Button, Container, Row, Col} from 'react-bootstrap';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box'
 
 function TeamList() {
 
@@ -37,13 +40,11 @@ function TeamList() {
         const jsonData = await res.json();
         let data = jsonData.rows;
    
-        console.log(jsonData)
-
         data = data[0].usr_teams;
         let teamsArray = []
         let i = 1;
 
-        console.log(jsonData.rows);
+        ;
         
 
         //Modify the data so that it is compatible with the Select menus
@@ -53,15 +54,14 @@ function TeamList() {
           i++;
         })
         
+        console.log(teamsArray);
         setUserTeams(teamsArray);
         setLoading(false);
     }
 
     const navButton = (userData) => {
-
-  
+      console.log("")
       navigate(`/teamprofile/${userData.team}`);
-        
     }
 
     useEffect(() => {
@@ -79,31 +79,33 @@ function TeamList() {
 
   return (
 
-    <div className=" col-md-6 mx-auto text-center" id="gymProfileDiv">
-
+    <Container fluid className="container">
+      <h1 className="title">My Teams</h1>
         {!loading ? (
-        <table className="team-table table table-bordered" variant="dark">
-            <thead>
-                <tr>
-                <th>Team Name</th>
+          <>
+            <Row xs={1} sm={2} md={3} lg={3} xl={3} xxl={3} className="con-rows g-6">
+              {userTeams.map((userTeams) => (
+                <Col className="con-column">
+                  <Card style={{ width: '18rem' }} key={userTeams.id} className="cards">
+                    <Card.Img variant="top" src={sampleImage}/>
+                    <Card.Body>
+                      <Card.Title>{userTeams.team}</Card.Title>
+                      <Button variant="primary" onClick={() => navButton(userTeams)}>Profile</Button>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              ))}
+            </Row>
+          </>
 
-                </tr>
-            </thead>
-            <tbody>
-                {userTeams.map(userTeams => (
-                <tr key={userTeams.id} data-item={userTeams}>
-                    <td data-title="Team-Name" key={userTeams.id} onClick={() => navButton(userTeams)}>{userTeams.team}</td>
-                </tr>
-                ))}
-            </tbody>
-            </table>
-            ) : (
-                <h1>Loading</h1>
-            )
-        }   
-
-        
-    </div>
+        ):
+        (
+          <Box sx={{ display: 'flex', justifyContent: 'center', size: 25}}>
+            <CircularProgress />
+          </Box>
+        )
+      }
+    </Container>
 
   )
 }
