@@ -26,7 +26,7 @@ import ListAltIcon from '@mui/icons-material/ListAlt';
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { makeStyles } from "@material-ui/core/styles";
 import '../CSS/Sidebar.css';
-import {Link} from 'react-router-dom';
+import {Link, Navigate} from 'react-router-dom';
 
 
 
@@ -108,8 +108,7 @@ function SearchAppBar() {
       sx={{ height: '100%', width: 250, backgroundColor: '#2196f3', color: 'white', }}
       role="presentation"
       onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)}
-    >
+      onKeyDown={toggleDrawer(anchor, false)}>
 
       <List>
 
@@ -130,7 +129,7 @@ function SearchAppBar() {
           </ListButton>
 
 
-        <Link to='/schedule' className='ListButton'>
+        <Link to='/clubschedule' className='ListButton'>
           <ListButton className='ListButton'>
             <ListItemIcon className='icon'>
               <EventNoteIcon className='icon'></EventNoteIcon>

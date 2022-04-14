@@ -14,18 +14,31 @@ function GymList({setAuth}) {
   
 
   const getGyms =  async () => {
-        
-    const res = await fetch("http://localhost:3001/gymlist",{
-      method: "GET",
-      headers: {token: localStorage.token}
-
-    });
     
-    const jsonData = await res.json();
-    const data = jsonData.rows;
-    setGymData(data);
-    setLoading(false);
+    try{
+
+      const res = await fetch("http://localhost:3001/gymlist",{
+        method: "GET",
+        headers: {"Content-Type": "application/json", token: localStorage.token},
+      });
+    
+      const jsonData = await res.json();
+
+      if(jsonData.msg === "Token is not valid"){
+        setAuth(false);
+      }
+      else{
+        const data = jsonData.rows;    
+        setGymData(data);
+        setLoading(false);
+      }
+    }
+    catch(error)
+    {
+      console.log(error);
+    }
   };
+    
 
   useEffect(() => {
     getGyms();

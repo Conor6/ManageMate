@@ -6,66 +6,72 @@ import {Card, Button, Container, Row, Col} from 'react-bootstrap';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box'
 
-function TeamList() {
+function TeamList({setAuth}) {
 
-    const [userData, setUserData] = useState();
-    const [userTeams, setUserTeams] = useState();
-    const [loading, setLoading] = useState(true);
-    let navigate = useNavigate();
+  const [userData, setUserData] = useState();
+  const [userTeams, setUserTeams] = useState();
+  const [loading, setLoading] = useState(true);
+  let navigate = useNavigate();
 
-    const getUserData =  async () => {
+  const getUserData =  async () => {
         
-        const res = await fetch("http://localhost:3001/user-info",{
-          method: "GET",
-          headers: {token: localStorage.token}
-        });
+    const res = await fetch("http://localhost:3001/user-info",{
+      method: "GET",
+      headers: {token: localStorage.token}
+    });
     
-        const jsonData = await res.json();
-        setUserData(jsonData);
-    };
+    const jsonData = await res.json();
 
-    const getUserTeams = async () => {
+    if(jsonData.msg === "Token is not valid"){
+      setAuth(false);
+    }
+    else{
+      const data = jsonData.rows;    
+      setUserData(jsonData);
+    }
+  };
 
-        const info = {
-          usr_id: userData.usr_id,
-        }
+  const getUserTeams = async () => {
+
+    const info = {
+      usr_id: userData.usr_id,
+    }
     
-        const body = info;
-        const res = await fetch("http://localhost:3001/getuserteams",{
-          method: "POST",
-          headers: {"Content-Type": "application/json"},
-          body: JSON.stringify(body)
-        });
+    const body = info;
+    const res = await fetch("http://localhost:3001/getuserteams",{
+      method: "POST",
+      headers: {"Content-Type": "application/json", token: localStorage.token},
+      body: JSON.stringify(body)
+    });
     
-        const jsonData = await res.json();
-        let data = jsonData.rows;
-   
-        data = data[0].usr_teams;
-        let teamsArray = []
-        let i = 1;
+    const jsonData = await res.json();
 
-        ;
-        
+    if(jsonData.msg === "Token is not valid"){
+      setAuth(false);
+    }
+    else{
 
-        //Modify the data so that it is compatible with the Select menus
-        Object.keys(data).forEach(key => {
-          
-          teamsArray.push({id: i, team: data[key] })
+      let data = jsonData.rows;
+      data = data[0].usr_teams;
+      let teamsArray = []
+      let i = 1;
+
+      //Modify the data so that it is compatible with the Select menus
+      Object.keys(data).forEach(key => {
+        teamsArray.push({id: i, team: data[key] })
           i++;
         })
-        
-        console.log(teamsArray);
         setUserTeams(teamsArray);
         setLoading(false);
+      }
     }
 
     const navButton = (userData) => {
-      console.log("")
       navigate(`/teamprofile/${userData.team}`);
     }
 
     useEffect(() => {
-        getUserData();
+      getUserData();
     }, []);
 
     useEffect(() => {

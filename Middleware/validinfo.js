@@ -3,7 +3,6 @@ module.exports = (req, res, next) => {
   
     function validEmail(userEmail) {
 
-      //console.log("valid Email");
       return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(userEmail);
       
     }

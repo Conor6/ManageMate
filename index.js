@@ -16,16 +16,26 @@ app.use(cors());
 app.use(express.json());
 
 
-app.post('/get-user-apps', async(req,res) => {
+app.post('/add-gym-picture', async(req,res) => {
   try {
+    const {picture} = req.body;
 
+    console.log(picture);
+
+  } 
+  catch (error) {
+    console.log(error.message);
+  }
+})
+
+app.post('/get-user-apps', authorisation, async(req,res) => {
+  try {
     const {usr_id} = req.body;;
 
     const getTeamApps = await pool.query(
       "SELECT * FROM booking_table where usr_id = $1;", 
       [usr_id]
     );
-
     res.json(getTeamApps);
   } 
   catch (error) {
@@ -33,16 +43,14 @@ app.post('/get-user-apps', async(req,res) => {
   }
 })
 
-app.post('/get-team-apps', async(req,res) => {
+app.post('/get-team-apps', authorisation, async(req,res) => {
   try {
-
     const {team} = req.body;;
 
     const getTeamApps = await pool.query(
       "SELECT * FROM booking_table where team = $1;", 
       [team]
     );
-
     res.json(getTeamApps);
   } 
   catch (error) {
@@ -50,19 +58,29 @@ app.post('/get-team-apps', async(req,res) => {
   }
 })
 
-
-app.post('/get-team', async(req,res) => {
+app.get('/getapps', authorisation, async(req,res) => {
   try {
 
-    const {t_name} = req.body;
+    const getApps = await pool.query(
+      "SELECT * FROM booking_table;", 
+    );
 
-    console.log(t_name);
+    res.json(getApps);
+  } 
+  catch (error) {
+    console.log(error.message);
+  }
+})
+
+
+app.post('/get-team', authorisation, async(req,res) => {
+  try {
+    const {t_name} = req.body;
 
     const selectUserTeams = await pool.query(
       "SELECT * FROM team where t_name = $1;", 
       [t_name]
     );
-
     res.json(selectUserTeams);
   } 
   catch (error) {
@@ -70,19 +88,15 @@ app.post('/get-team', async(req,res) => {
   }
 })
 
-app.post('/getuserteams', async(req,res) => {
+app.post('/getuserteams', authorisation, async(req,res) => {
   try {
-
     const usr_id = req.body.usr_id;
-
-    console.log(req.body);
 
     const selectUserTeams = await pool.query(
       "SELECT usr_teams FROM user_table where usr_id = $1;", 
       [usr_id]
     );
 
-    //console.log(selectUserTeams);
     res.json(selectUserTeams);
   } 
   catch (error) {
@@ -90,19 +104,16 @@ app.post('/getuserteams', async(req,res) => {
   }
 })
 
-app.post('/register-user', async(req,res) => {
+app.post('/register-user', authorisation, async(req,res) => {
   try {
 
     const usr_id = req.body.usr_id;
     const password = req.body.usr_password;
     const teams = req.body.usr_team;
 
-    console.log(teams);
-
     const saltRounds = 10;
     const salt = await bcrypt.genSalt(saltRounds);
     const hash = await bcrypt.hash(password, salt);
-
 
     const registerUser = await pool.query(
       'UPDATE user_table SET usr_password = $2, usr_teams = $3 where usr_id = $1;', 
@@ -115,13 +126,11 @@ app.post('/register-user', async(req,res) => {
   }
 })
 
-app.get('/get-teams', async(req,res) => {
+app.get('/get-teams', authorisation, async(req,res) => {
   try {
-
     const select = await pool.query(
       "SELECT t_name FROM team;", 
     );
-
     res.json(select);
   } 
   catch (error) {
@@ -129,26 +138,20 @@ app.get('/get-teams', async(req,res) => {
   }
 })
 
-app.get("/signup/:token", async(req,res) => {
-
+app.get("/signup/:token", authorisation, async(req,res) => {
 
   const {token} = req.params;
 
   jwt.verify(token, process.env.jwtSecret, (error, decoded) =>{
-
     if(error){
       console.log("Error");
       res.json(error);
-      
     }
     else{
       res.json(decoded.user);
     }
-
   })
-
 })
-
 
 app.post('/addcourt', authorisation, async(req, res) => {
   try {
@@ -171,20 +174,16 @@ app.post('/addcourt', authorisation, async(req, res) => {
 //Post request to log a user in
 app.post('/login', validInfo, async(req, res) => {
   try {
-
     //Get information from front end
     const email = req.body.usr_email;
     const  password = req.body.usr_password;
-    
+  
     //Create select query to see if user exists
     const user = await pool.query("SELECT * FROM user_table WHERE usr_email = $1", [email]);
 
     if(user.rows.length === 0){
-
       return res.status(401).json("Email or Password incorrect")
-
     }
-
     //Get the password that is stored in the database
     let db_password = user.rows[0].usr_password;
 
@@ -213,7 +212,6 @@ app.post('/login', validInfo, async(req, res) => {
 app.get("/verify", authorisation, async (req,res) => {
 
   try{
-
     res.json(true);
   }
   catch(error) {
@@ -222,32 +220,25 @@ app.get("/verify", authorisation, async (req,res) => {
   }
 });
 
-app.post('/addgym', async(req, res) => {
+app.post('/addgym', authorisation, async(req, res) => {
   try {
-
     const { gym_name } = req.body;
     const { gym_address } = req.body;
     const { gym_opening_hours } = req.body;
-
 
     const insert = await pool.query(
       "INSERT INTO gym (gym_name, gym_address, gym_opening_hours) VALUES($1, $2, $3)", 
       [gym_name, gym_address, gym_opening_hours]
     );
-
     res.json(insert);
-
   } 
   catch (error) {
     console.log(error.message);
   }
-
 })
 
 app.post('/createaccount', validInfo, async(req, res) => {
-  
   try {
-
     const { usr_email, usr_password, usr_type} = req.body;
     const saltRounds = 10;
     const salt = await bcrypt.genSalt(saltRounds);
@@ -290,14 +281,10 @@ app.post('/createaccount', validInfo, async(req, res) => {
       </div>`
     })
 
-    
-    //return res.json({ token });
-
   } 
   catch (error) {
     console.log(error.message);
   }
-
 })
 
 app.get('/gymlist', authorisation, async(req, res) => {
@@ -308,11 +295,11 @@ app.get('/gymlist', authorisation, async(req, res) => {
     );
 
     res.json(select);
+
   } 
   catch (error) {
     console.log(error);
   }
-
 })
 
 app.post('/appointment', async(req, res) =>{
@@ -320,51 +307,37 @@ app.post('/appointment', async(req, res) =>{
   const { id, title, start_date, end_date, rRule, usr_id, activity, gym, team}  = req.body;
 
   try {
-
     const insertAppointment = await pool.query(
       'INSERT INTO booking_table (id, title, "startDate", "endDate", "rRule", usr_id, activity, gym, team) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)', 
       [id, title, start_date, end_date,rRule, usr_id, activity, gym, team]
     );
-
-    res.json(insertAppointment);
-
-    
+    res.json(insertAppointment);   
   } catch (error) {
     console.log(error);
   }
 })
 
-app.get('/getappointments', async(req,res) => {
+app.get('/getappointments', authorisation, async(req,res) => {
 
   try {
-
     const getAppointments = await pool.query(
       "SELECT * FROM booking_table;"
     );
-
     res.json(getAppointments);
-
-    
   } catch (error) {
     console.log(error);
   }
 });
 
 app.post('/delete-appointment', async(req,res) => {
-
   try {
-
-    console.log("deleted");
-
     const {id} = req.body;
 
     const deleteAppointment = await pool.query(
       'DELETE from booking_table WHERE id = $1', 
       [id]
     );
-    
     res.json(deleteAppointment);
-
   } catch (error) {
     console.log(error);
   }
@@ -373,34 +346,24 @@ app.post('/delete-appointment', async(req,res) => {
 app.post('/update-appointment', async(req,res) => {
 
   try {
-
     const {id, title, startDate, endDate, rRule, usr_id, activity, gym, team, exDate} = req.body;
-
-    console.log(exDate);
 
     const updateAppointment = await pool.query(
       'UPDATE booking_table SET title = $2, "startDate" = $3, "endDate" = $4, "rRule" = $5, usr_id = $6, activity = $7, gym = $8, team = $9, "exDate" = $10 WHERE id = $1', 
       [id, title, startDate, endDate, rRule, usr_id, activity, gym, team, exDate]
     );
-    
     res.json(updateAppointment);
-
   } catch (error) {
     console.log(error);
   }
 });
 
-app.get('/getgyms', async(req,res) => {
-
+app.get('/getgyms', authorisation, async(req,res) => {
   try {
-
     const getGyms = await pool.query(
       "SELECT gym_name FROM gym;"
     );
-
     res.json(getGyms);
-
-    
   } catch (error) {
     console.log(error);
   }
@@ -414,8 +377,6 @@ app.get('/user-info', authorisation, async(req,res) => {
     console.log(error);
   }
 });
-
-
 
 app.listen(3001, function() {
 

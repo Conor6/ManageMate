@@ -6,7 +6,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 
 
-function MyBookings() {
+function MyBookings({setAuth}) {
 
     const [userData, setUserData] = useState();
     const [userApps, setUserApps] = useState();
@@ -31,13 +31,19 @@ function MyBookings() {
         const body = data;
         const res =  await fetch("http://localhost:3001/get-user-apps",{
           method: "POST",
-          headers: {"Content-Type": "application/json"},
+          headers: {"Content-Type": "application/json", token: localStorage.token},
           body: JSON.stringify(body)
         })
   
         const jsonData = await res.json();
-        setUserApps(jsonData.rows)
-        setLoading(false);
+
+        if(jsonData.msg === "Token is not valid"){
+            setAuth(false);
+        }
+          else{
+            setUserApps(jsonData.rows)
+            setLoading(false);
+        }
     }
 
     useEffect(() => {

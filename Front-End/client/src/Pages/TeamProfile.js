@@ -1,14 +1,14 @@
 import React from 'react'
 import { Container, Row } from "react-bootstrap";
 import '../CSS/TeamProfile.css'
-import Schedule from './Schedule';
+import Schedule from '../Components/Schedule';
 import {useState, useEffect} from 'react';
 import { useParams } from "react-router-dom";
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 
 
-function TeamProfile() {
+function TeamProfile({setAuth}) {
 
     const [teamData, setTeamData] = useState();
     const [loading, setLoading] = useState(true);
@@ -24,13 +24,19 @@ function TeamProfile() {
       const body = data;
       const res =  await fetch("http://localhost:3001/get-team",{
         method: "POST",
-        headers: {"Content-Type": "application/json"},
+        headers: {"Content-Type": "application/json", token: localStorage.token},
         body: JSON.stringify(body)
       })
 
       const jsonData = await res.json();
-      setTeamData(jsonData.rows[0])
-      setLoading(false);
+
+      if(jsonData.msg === "Token is not valid"){
+        setAuth(false);
+      }
+      else{
+        setTeamData(jsonData.rows[0])
+        setLoading(false);
+      }
     }
 
     const getTeamApps = async (teamName) => {
@@ -41,7 +47,7 @@ function TeamProfile() {
       const body = data;
       const res =  await fetch("http://localhost:3001/get-team-apps",{
         method: "POST",
-        headers: {"Content-Type": "application/json"},
+        headers: {"Content-Type": "application/json", token: localStorage.token},
         body: JSON.stringify(body)
       })
 
@@ -50,10 +56,8 @@ function TeamProfile() {
     }
 
     useEffect(() => {
-
       getTeamInfo(teamName);
       getTeamApps(teamName);
-
     }, []);
 
 
