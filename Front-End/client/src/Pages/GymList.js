@@ -12,18 +12,14 @@ function GymList({setAuth}) {
   const [gym_data, setGymData] = useState([]);
   const [loading, setLoading] = useState(true);
   
-
   const getGyms =  async () => {
-    
     try{
 
       const res = await fetch("http://localhost:3001/gymlist",{
         method: "GET",
         headers: {"Content-Type": "application/json", token: localStorage.token},
       });
-    
       const jsonData = await res.json();
-
       if(jsonData.msg === "Token is not valid"){
         setAuth(false);
       }
@@ -38,7 +34,6 @@ function GymList({setAuth}) {
       console.log(error);
     }
   };
-    
   useEffect(() => {
     getGyms();
   }, []);
@@ -67,8 +62,6 @@ function GymList({setAuth}) {
               ))}
             </Row>
           </>
-
-
         ):
         (
           <Box sx={{ display: 'flex', justifyContent: 'center', size: 25}}>

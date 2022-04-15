@@ -1,8 +1,14 @@
 .save-edit-btn {
-    width: 100%;
-  }
+  width: 100%;
+}
   
-  .headline {
-    padding: 20px;
-  }
+.headline {
+  padding: 20px;
+}
   
+.profile-container{
+  justify-content: center;
+  text-align: center;
+  display: "flex";
+  align-items: center;
+}
