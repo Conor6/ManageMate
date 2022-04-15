@@ -5,32 +5,22 @@ import {useNavigate } from "react-router-dom";
 import Dropdown from "react-bootstrap/Dropdown";
 
 function CreateAccount({setAuth}) {
-
-  let navigate = useNavigate();
-
+  
     const usr_email = useRef(null);
     const usr_password = useRef(null);
     const usr_type = useRef(null);
-
     const [value, setValue] = useState();
-    
-    
     const options = [{id: 1, name: "Manager"},{id: 2, name: "Coach"}, {id: 3, name: "Comittee Member"}];
 
     const signUpUser =  async () => {
-
       const data = {
-      
         usr_email: usr_email.current.value,
         usr_password: usr_password.current.value,
         usr_type : usr_type.current.value
-    
       }
 
       try{
-
         const body = data;
-
         const response = await fetch("http://localhost:3001/createaccount", {
 
           method: "POST",
@@ -39,26 +29,13 @@ function CreateAccount({setAuth}) {
 
         });
         
-        //console.log(response);
-
-        /*if(response.status === 200){
-          navigate("/");
-        }
-        */
-       
         const parseRes = await response.json();
-
-        //console.log(parseRes);
-
         localStorage.setItem("token", parseRes.token);
         setAuth(true);
 
-        
       }
       catch(err){
-        
         console.log(err.message)
-        
       }
     
   }
@@ -107,7 +84,7 @@ function CreateAccount({setAuth}) {
         </Form.Group>
 
 
-        <Button id="loginBtn" variant="primary" onClick={()=> signUpUser()}>Sign Up</Button>
+        <Button id="loginBtn" variant="primary" onClick={()=> signUpUser()}>Create Account</Button>
 
       </Form>
     </div>

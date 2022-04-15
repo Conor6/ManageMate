@@ -67,7 +67,7 @@ function App() {
 
             <Route path="/" element={ !isAuthenticated ? ( <Login setAuth={setAuth}/> ) : (<Navigate to="/gymlist"/>)} />
 
-            <Route path="/createaccount" element={ !isAuthenticated ? ( <CreateAccount setAuth={setAuth}/> ) : (<Navigate to="/"/>)} />
+            <Route path="/createaccount" element={<CreateAccount setAuth={setAuth}/> } />
 
             <Route path="/addcourt/:gym_id" element={ isAuthenticated ? ( <AddCourt setAuth={setAuth}/> ) : (<Navigate to="/"/>)} />
 

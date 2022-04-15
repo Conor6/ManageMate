@@ -88,7 +88,7 @@ app.post('/get-team', authorisation, async(req,res) => {
   }
 })
 
-app.post('/getuserteams', authorisation, async(req,res) => {
+app.post('/getuserteams', async(req,res) => {
   try {
     const usr_id = req.body.usr_id;
 
@@ -126,7 +126,7 @@ app.post('/register-user', authorisation, async(req,res) => {
   }
 })
 
-app.get('/get-teams', authorisation, async(req,res) => {
+app.get('/get-teams', async(req,res) => {
   try {
     const select = await pool.query(
       "SELECT t_name FROM team;", 
@@ -138,7 +138,7 @@ app.get('/get-teams', authorisation, async(req,res) => {
   }
 })
 
-app.get("/signup/:token", authorisation, async(req,res) => {
+app.get("/signup/:token", async(req,res) => {
 
   const {token} = req.params;
 

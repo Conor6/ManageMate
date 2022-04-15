@@ -43,14 +43,9 @@ function SignUp() {
 
       const jsonData = await res.json();
 
-      if(jsonData.message === "jwt expired"){
-        console.log("JWT expired")
-      }
-      else{
-        console.log("JWT not expired");
-        const userData = jsonData;
-        setUser(userData)
-      }
+      const userData = jsonData;
+      setUser(userData)
+      
       
     };
 

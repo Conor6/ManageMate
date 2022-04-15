@@ -37,14 +37,6 @@
   }
 }
 
-
-#loginDiv{
-  border: 2px solid rgb(5, 179, 223);
-  border-radius: 25px;
-  
-
-}
-
 .container{
   padding: 10%;
 
@@ -83,19 +75,7 @@
 
 }
 
-#addGymDiv{
-  border: 2px solid rgb(5, 179, 223);
-  border-radius: 25px;
-  padding: 10px;
 
-}
-
-#addCourtDiv{
-  border: 2px solid rgb(5, 179, 223);
-  border-radius: 25px;
-  padding: 10px;
-
-}
 
 #courtSaveBtn{
   margin-left: 80%;
@@ -111,10 +91,6 @@
   font-weight: bold;
 }
 
-#gymProfileDiv{
-  border: 2px solid #61dafb;
-
-}
 
 .navbar{
   padding-top: 10px;
