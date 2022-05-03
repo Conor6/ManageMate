@@ -21,8 +21,6 @@ app.post('/getgymapps', authorisation, async(req,res) => {
 
     const gym = req.body.gym_name;
 
-    console.log(gym);
-
     const getGymApps = await pool.query(
       "SELECT * FROM booking_table where gym = $1;", 
       [gym]

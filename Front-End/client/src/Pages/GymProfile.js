@@ -16,20 +16,15 @@ function GymProfile({setAuth}) {
 
     const getGymApps = async (gym_name) => {
 
-        console.log("Test "+gym_name);
-
         const data = {
             gym_name: gym_name
         }
-      
         const body = data;
         const res =  await fetch("http://localhost:3001/getgymapps",{
           method: "POST",
           headers: {"Content-Type": "application/json", token: localStorage.token},
           body: JSON.stringify(body)
         })
-
-        console.log("Ran");
         const jsonData = await res.json();
         setGymApps(jsonData.rows)
       }
@@ -43,7 +38,7 @@ function GymProfile({setAuth}) {
         <>
             <Container className='heading'>
                 <h1 className='gym-name'> {gym_name.gym_name} </h1>
-                <Schedule appointments={gymApps}></Schedule>
+                <Schedule appointments={gymApps}/>
             </Container>
         </>
     );
